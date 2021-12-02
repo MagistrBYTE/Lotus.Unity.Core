@@ -1,10 +1,10 @@
 {
-    "name": "Lotus.Unity.Core.Editor.Tests",
+    "name": "MagistrBYTE.Lotus.Unity.Core.Editor.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Lotus.Unity.Core"
+        "MagistrBYTE.Lotus.Unity.Core"
     ],
     "includePlatforms": [
         "Editor"

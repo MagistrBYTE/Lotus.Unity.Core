@@ -130,7 +130,7 @@ namespace Lotus
 			/// </summary>
 			//---------------------------------------------------------------------------------------------------------
 			[Test]
-			public static void TestPatternView()
+			public static void TestView()
 			{
 				ViewItem<CActivity> view_item = new ViewItem<CActivity>(new CActivity()
 				{
@@ -154,7 +154,7 @@ namespace Lotus
 			/// </summary>
 			//---------------------------------------------------------------------------------------------------------
 			[Test]
-			public static void TestPatternCollectionView()
+			public static void TestCollectionView()
 			{
 				CollectionView<ViewItem<CActivity>, CActivity> viewItems = new CollectionView<ViewItem<CActivity>, CActivity>();
 				viewItems.Source = CActivity.Activities;
