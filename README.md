@@ -1,3 +1,3 @@
-## CubeXBasis
+## Lotus.Unity.Core
 
-CubeXBasis - это набор, объединяющий основные кроссплатформенные модули: Core, Math, Common, Algorithm, Patterns которые является базовой платформой для Unity
+Lotus.Unity.Core - модуль Lotus.Core для Unity
