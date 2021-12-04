@@ -913,6 +913,8 @@ namespace Lotus
 					{
 #if (UNITY_2017_1_OR_NEWER)
 						UnityEngine.Debug.LogException(exc);
+#else
+						XLogger.LogException(exc);
 #endif
 					}
 				}
@@ -947,6 +949,8 @@ namespace Lotus
 						{
 #if (UNITY_2017_1_OR_NEWER)
 							UnityEngine.Debug.LogException(exc);
+#else
+							XLogger.LogException(exc);
 #endif
 						}
 					}
@@ -1038,6 +1042,8 @@ namespace Lotus
 					{
 #if (UNITY_2017_1_OR_NEWER)
 						UnityEngine.Debug.LogException(exc);
+#else
+						XLogger.LogException(exc);
 #endif
 					}
 				}
@@ -1072,6 +1078,8 @@ namespace Lotus
 						{
 #if (UNITY_2017_1_OR_NEWER)
 							UnityEngine.Debug.LogException(exc);
+#else
+							XLogger.LogException(exc);
 #endif
 						}
 					}
