@@ -513,6 +513,7 @@ namespace Lotus
 				{
 					mIsFiltered = value;
 					NotifyPropertyChanged(PropertyArgsIsFiltered);
+					RaiseIsFilteredChanged();
 				}
 			}
 
@@ -527,8 +528,22 @@ namespace Lotus
 				}
 				set
 				{
-					mFilter = value;
-					ResetSource();
+					if(mFilter == null || mFilter != value)
+					{
+						mFilter = value;
+						if (mFilter != null)
+						{
+							mIsFiltered = true;
+							NotifyPropertyChanged(PropertyArgsIsFiltered);
+							ResetSource();
+						}
+						else
+						{
+							mIsFiltered = false;
+							NotifyPropertyChanged(PropertyArgsIsFiltered);
+							ResetSource();
+						}
+					}
 				}
 			}
 
@@ -792,6 +807,20 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			protected virtual void RaiseNameChanged()
 			{
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Изменение статуса сортировки коллекции.
+			/// Метод автоматически вызывается после установки соответствующего свойства
+			/// </summary>
+			//---------------------------------------------------------------------------------------------------------
+			protected virtual void RaiseIsFilteredChanged()
+			{
+				if(mIsFiltered && mFilter != null)
+				{
+					ResetSource();
+				}
 			}
 			#endregion
 
