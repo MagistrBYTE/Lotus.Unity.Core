@@ -186,6 +186,7 @@ namespace Lotus
 				}
 
 				// Фильтрация
+				viewItems.IsFiltered = true;
 				viewItems.Filter = (CActivity activity) =>
 				{
 					return (activity.Price > 5);
