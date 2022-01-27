@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 #if UNITY_EDITOR
 //=====================================================================================================================
@@ -76,7 +76,8 @@ public class LotusAssetsBrowserWindow : LotusUtilityBaseWindow
 	//-----------------------------------------------------------------------------------------------------------------
 	public void OnEnable()
 	{
-		mBaseDirectory = new CFileSystemDirectory(XEditorSettings.ASSETS_PATH);
+		String path = "C:\\AssetsLibrary";
+		mBaseDirectory = new CFileSystemDirectory(path);
 		mBaseDirectory.RecursiveFileSystemInfo();
 		mSearchField = new SearchField();
 		mExploreFile = new CTreeViewControl(mBaseDirectory);
@@ -215,6 +216,24 @@ public class LotusAssetsBrowserWindow : LotusUtilityBaseWindow
 			}
 		}
 		GUILayout.EndHorizontal();
+
+		GUILayout.Space(8);
+		GUILayout.BeginHorizontal();
+		{
+			GUILayout.Space(2);
+			if (GUILayout.Button("Импорт"))
+			{
+				String dest_path = Path.Combine(XEditorSettings.ASSETS_PATH, "AssetsLibrary");
+				if (mExploreFile.SelectedDirectory != null)
+				{
+					mExploreFile.SelectedDirectory.Copy(dest_path, true);
+					AssetDatabase.Refresh();
+				}
+			}
+		}
+		GUILayout.EndHorizontal();
+
+
 
 		GUILayout.Space(2);
 	}

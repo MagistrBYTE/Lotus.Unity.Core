@@ -9,12 +9,13 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.Serialization;
 //=====================================================================================================================
 namespace Lotus
 {
@@ -42,6 +43,7 @@ namespace Lotus
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
+		[DataContract]
 		public class CNameable : PropertyChangedBase, ILotusNameable, IComparable<ILotusNameable>, IComparable<CNameable>
 		{
 			#region ======================================= СТАТИЧЕСКИЕ ДАННЫЕ ========================================
@@ -64,6 +66,7 @@ namespace Lotus
 			/// <summary>
 			/// Наименование объекта
 			/// </summary>
+			[DataMember]
 			public virtual String Name
 			{
 				get { return (mName); }
@@ -152,7 +155,7 @@ namespace Lotus
 
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
-		/// Определение интерфейса для объектов реализующих понятие индекса <see cref="XIdentifier.Index"/>
+		/// Определение интерфейса для объектов реализующих понятие индекса
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		public interface ILotusIndexable
@@ -165,7 +168,7 @@ namespace Lotus
 
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
-		/// Определение интерфейса для объектов реализующих уникальный числовой идентификатор <see cref="XIdentifier.Id"/>
+		/// Определение интерфейса для объектов реализующих уникальный числовой идентификатор
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		public interface ILotusIdentifierId
@@ -173,7 +176,7 @@ namespace Lotus
 			/// <summary>
 			/// Уникальный идентификатор объекта
 			/// </summary>
-			Int32 Id { get; set; }
+			Int64 Id { get; set; }
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -182,14 +185,15 @@ namespace Lotus
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
-		public class CIdentifierID : PropertyChangedBase, ILotusIdentifierId
+		[DataContract]
+		public class CIdentifierId : PropertyChangedBase, ILotusIdentifierId
 		{
 			#region ======================================= ДАННЫЕ ====================================================
 #if (UNITY_2017_1_OR_NEWER)
 			[UnityEngine.SerializeField]
 			[UnityEngine.HideInInspector]
 #endif
-			protected internal Int32 mID;
+			protected internal Int64 mId;
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
@@ -199,12 +203,14 @@ namespace Lotus
 			/// <summary>
 			/// Уникальный идентификатор объекта
 			/// </summary>
-			public virtual Int32 Id
+			[Browsable(false)]
+			[DataMember]
+			public virtual Int64 Id
 			{
-				get { return (mID); }
+				get { return (mId); }
 				set
 				{
-					mID = value;
+					mId = value;
 				}
 			}
 			#endregion
@@ -215,7 +221,7 @@ namespace Lotus
 			/// Конструктор по умолчанию инициализирует объект класса предустановленными значениями
 			/// </summary>
 			//---------------------------------------------------------------------------------------------------------
-			public CIdentifierID()
+			public CIdentifierId()
 			{
 
 			}
@@ -226,37 +232,11 @@ namespace Lotus
 			/// </summary>
 			/// <param name="id">Идентификатор объекта</param>
 			//---------------------------------------------------------------------------------------------------------
-			public CIdentifierID(Int32 id)
+			public CIdentifierId(Int64 id)
 			{
-				mID = id;
+				mId = id;
 			}
 			#endregion
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		/// <summary>
-		/// Определение интерфейса для объектов реализующих глобальный уникальный числовой идентификатор <see cref="XIdentifier.UID"/>
-		/// </summary>
-		//-------------------------------------------------------------------------------------------------------------
-		public interface ILotusIdentifierUID
-		{
-			/// <summary>
-			/// Глобальный уникальный идентификатор объекта
-			/// </summary>
-			Int64 UID { get; set; }
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		/// <summary>
-		/// Определение интерфейса для объектов реализующих глобальный строковый идентификатор <see cref="XIdentifier.UniqueId"/>
-		/// </summary>
-		//-------------------------------------------------------------------------------------------------------------
-		public interface ILotusIdentifierUniqueId
-		{
-			/// <summary>
-			/// Глобальный строковый идентификатор
-			/// </summary>
-			String UniqueId { get; set; }
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -265,6 +245,7 @@ namespace Lotus
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
+		[DataContract]
 		public class CNameableId : PropertyChangedBase, ILotusNameable, ILotusIdentifierId, IComparable<ILotusNameable>, 
 			IComparable<CNameableId>, ILotusSupportViewInspector
 		{
@@ -274,7 +255,7 @@ namespace Lotus
 			//
 			// Идентификация
 			protected static readonly PropertyChangedEventArgs PropertyArgsName = new PropertyChangedEventArgs(nameof(Name));
-			protected static readonly PropertyChangedEventArgs PropertyArgsID = new PropertyChangedEventArgs(nameof(Id));
+			protected static readonly PropertyChangedEventArgs PropertyArgsId = new PropertyChangedEventArgs(nameof(Id));
 			#endregion
 
 			#region ======================================= ДАННЫЕ ====================================================
@@ -287,13 +268,14 @@ namespace Lotus
 			[UnityEngine.SerializeField]
 			[UnityEngine.HideInInspector]
 #endif
-			protected internal Int32 mID;
+			protected internal Int64 mId;
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
 			/// <summary>
 			/// Наименование объекта
 			/// </summary>
+			[DataMember]
 			public virtual String Name
 			{
 				get { return (mName); }
@@ -308,13 +290,15 @@ namespace Lotus
 			/// <summary>
 			/// Уникальный идентификатор объекта
 			/// </summary>
-			public virtual Int32 Id
+			[Browsable(false)]
+			[DataMember]
+			public virtual Int64 Id
 			{
-				get { return (mID); }
+				get { return (mId); }
 				set
 				{
-					mID = value;
-					NotifyPropertyChanged(PropertyArgsID);
+					mId = value;
+					NotifyPropertyChanged(PropertyArgsId);
 				}
 			}
 			#endregion
@@ -376,9 +360,9 @@ namespace Lotus
 			/// </summary>
 			/// <param name="id">Идентификатор объекта</param>
 			//---------------------------------------------------------------------------------------------------------
-			public CNameableId(Int32 id)
+			public CNameableId(Int64 id)
 			{
-				mID = id;
+				mId = id;
 			}
 			#endregion
 

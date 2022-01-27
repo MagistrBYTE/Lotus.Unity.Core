@@ -10,7 +10,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -612,7 +612,8 @@ namespace Lotus
 			/// </summary>
 			/// <param name="this">Список строк</param>
 			/// <param name="separator">Разделитель</param>
-			/// <param name="use_space">Использовать ли дополнительный пробел меду элементами</param>
+			/// <param name="use_space">Использовать ли дополнительный пробел между элементами</param>
+			/// <returns>Строка</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public static String ToTextString(this IList<String> @this, Char separator, Boolean use_space)
 			{
@@ -626,7 +627,8 @@ namespace Lotus
 			/// <param name="this">Список строк</param>
 			/// <param name="default_text">Текст если список пустой</param>
 			/// <param name="separator">Разделитель</param>
-			/// <param name="use_space">Использовать ли дополнительный пробел меду элементами</param>
+			/// <param name="use_space">Использовать ли дополнительный пробел между элементами</param>
+			/// <returns>Строка</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public static String ToTextString(this IList<String> @this, String default_text, Char separator, Boolean use_space)
 			{
@@ -658,6 +660,114 @@ namespace Lotus
 
 					return (builder.ToString());
 				}
+			}
+			#endregion
+
+			#region ======================================= IList<Single> =============================================
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Получить индекс элемента список значение которого наболее близко указанному аргументу
+			/// </summary>
+			/// <param name="this">Список</param>
+			/// <param name="value">Значение</param>
+			/// <returns>Индекс</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static Int32 GetNearestIndex(this IList<Single> @this, Single value)
+			{
+				if(value <= @this[0])
+				{
+					return (0);
+				}
+				if (value >= @this[@this.Count - 1])
+				{
+					return (@this.Count - 1);
+				}
+
+				for (Int32 i = 0; i < @this.Count; i++)
+				{
+					if(value < @this[i])
+					{
+						Single prev_delta = Math.Abs(value - @this[i - 1]);
+						Single curr_delta = Math.Abs(@this[i] - value);
+						if(prev_delta < curr_delta)
+						{
+							return (i - 1);
+						}
+						else
+						{
+							return (i);
+						}
+					}
+				}
+
+				return (0);
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Получить значение элемента списка значение которого наболее близко указанному аргументу
+			/// </summary>
+			/// <param name="this">Список</param>
+			/// <param name="value">Значение</param>
+			/// <returns>Значение</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static Single GetNearestValue(this IList<Single> @this, Single value)
+			{
+				return (@this[@this.GetNearestIndex(value)]);
+			}
+			#endregion
+
+			#region ======================================= IList<Double> =============================================
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Получить индекс элемента список значение которого наболее близко указанному аргументу
+			/// </summary>
+			/// <param name="this">Список</param>
+			/// <param name="value">Значение</param>
+			/// <returns>Индекс</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static Int32 GetNearestIndex(this IList<Double> @this, Double value)
+			{
+				if (value <= @this[0])
+				{
+					return (0);
+				}
+				if (value >= @this[@this.Count - 1])
+				{
+					return (@this.Count - 1);
+				}
+
+				for (Int32 i = 0; i < @this.Count; i++)
+				{
+					if (value < @this[i])
+					{
+						Double prev_delta = Math.Abs(value - @this[i - 1]);
+						Double curr_delta = Math.Abs(@this[i] - value);
+						if (prev_delta < curr_delta)
+						{
+							return (i - 1);
+						}
+						else
+						{
+							return (i);
+						}
+					}
+				}
+
+				return (0);
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Получить значение элемента списка значение которого наболее близко указанному аргументу
+			/// </summary>
+			/// <param name="this">Список</param>
+			/// <param name="value">Значение</param>
+			/// <returns>Значение</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static Double GetNearestValue(this IList<Double> @this, Double value)
+			{
+				return (@this[@this.GetNearestIndex(value)]);
 			}
 			#endregion
 

@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -358,7 +358,7 @@ namespace Lotus
 						CMessageConsole message = new CMessageConsole(name, arg);
 
 						// Посылаем сообщение
-						XMessageDispatcher.SendMessage(message);
+						//XMessageDispatcher.SendMessage(message);
 
 						// Информируем что сообщение послано
 						XLogger.Messages.Add(new TLogMessage("Message: Name <" + name + ">  Arg <" + arg + ">", TLogType.Info));

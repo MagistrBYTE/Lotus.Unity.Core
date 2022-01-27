@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Runtime.CompilerServices;
@@ -26,7 +26,7 @@ namespace Lotus
 		//! \defgroup CoreUnityEditor Подсистема расширения функциональности редактора Unity
 		//! Подсистема поддержки редактора Unity обеспечивает расширение функциональности редактора Unity и его служебных
 		//! классов, является базой для построения собственных редакторов и иных вспомогательных инструментов.
-		//! \ingroup Core
+		//! \ingroup CoreUnity
 		/*@{*/
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -69,39 +69,49 @@ namespace Lotus
 			public const String SourcePath = MainPath + "Runtime/";
 
 			/// <summary>
-			/// Относительный путь директории исходного кода набора Basis
+			/// Относительный путь директории исходного кода модуля Core
 			/// </summary>
-			public const String SourceBasisPath = SourcePath + "Basis/";
+			public const String SourceCorePath = SourcePath + "Lotus.Core/";
+
+			/// <summary>
+			/// Относительный путь директории исходного кода модуля Math
+			/// </summary>
+			public const String SourceMathPath = SourcePath + "Lotus.Math/";
+
+			/// <summary>
+			/// Относительный путь директории исходного кода модуля Object3D
+			/// </summary>
+			public const String SourceObject3DPath = SourcePath + "Lotus.Object3D/";
+
+			/// <summary>
+			/// Относительный путь директории исходного кода набора Graphics2D
+			/// </summary>
+			public const String SourceGraphics2DPath = SourcePath + "Lotus.Graphics2D/";
+
+			/// <summary>
+			/// Относительный путь директории исходного кода набора VisualEffects
+			/// </summary>
+			public const String SourceGraphics3DPath = SourcePath + "Lotus.VisualEffects/";
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Environment
 			/// </summary>
-			public const String SourceEnvironmentPath = SourcePath + "Environment/";
-
-			/// <summary>
-			/// Относительный путь директории исходного кода набора Functional
-			/// </summary>
-			public const String SourceFunctionalPath = SourcePath + "Functional/";
-
-			/// <summary>
-			/// Относительный путь директории исходного кода набора 2D
-			/// </summary>
-			public const String SourceGraphics2DPath = SourcePath + "Graphics2D/";
-
-			/// <summary>
-			/// Относительный путь директории исходного кода набора 3D
-			/// </summary>
-			public const String SourceGraphics3DPath = SourcePath + "Graphics3D/";
+			public const String SourceEnvironmentPath = SourcePath + "Lotus.Environment/";
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Person
 			/// </summary>
-			public const String SourcePersonPath = SourcePath + "Person/";
+			public const String SourcePersonPath = SourcePath + "Lotus.Person/";
 
 			/// <summary>
-			/// Относительный путь директории исходного кода набора Service
+			/// Относительный путь директории исходного кода набора Transport
 			/// </summary>
-			public const String SourceServicePath = SourcePath + "Service/";
+			public const String SourceTransportPath = SourcePath + "Lotus.Transport/";
+
+			/// <summary>
+			/// Относительный путь директории исходного кода модуля Service
+			/// </summary>
+			public const String SourceServicePath = SourcePath + "Lotus.Service/";
 			#endregion
 
 			#region ======================================= БАЗОВЫЕ ПУТИ К РЕСУРСАМ ===================================
@@ -162,107 +172,56 @@ namespace Lotus
 			public const Int32 MenuOrderLast = 100000;
 			#endregion
 
-			#region ======================================= НАБОР Basis ===============================================
-			//---0-1000---//
-			//
-			// МОДУЛЬ Core
-			//
+			#region ======================================= РАЗМЕЩЕНИЕ МЕНЮ МОДУЛЕЙ ===================================
 			/// <summary>
 			/// Последовательность в размещении меню редактора базового модуля (для упорядочивания)
 			/// </summary>
 			public const Int32 MenuOrderCore = 0;
 
-			//
-			// МОДУЛЬ Common
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора общего модуля (для упорядочивания)
+			/// Последовательность в размещении меню редактора математического модуля (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderCommon = 100;
-			#endregion
+			public const Int32 MenuOrderMath = 1000;
 
-			#region ======================================= НАБОР Environment =========================================
-			//---1100-2000---//
-			#endregion
-
-			#region ======================================= НАБОР Functional ==========================================
-			//---2100-3000---//
-			#endregion
-
-			#region ======================================= НАБОР Graphics2D ==========================================
-			//---3100-4000---//
-			//
-			// ОБЩИЙ МОДУЛЬ 2D
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора общего модуля 2D (для упорядочивания)
+			/// Последовательность в размещении меню редактора модуля алгоритмов (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrder2DCommon = 3100;
+			public const Int32 MenuOrderAlgorithm = 2000;
 
-			//
-			// МОДУЛЬ IMGUI
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора модуля IMGUI (для упорядочивания)
+			/// Последовательность в размещении меню редактора модуля для работы с 3D контентом (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderIMGUI = 3200;
+			public const Int32 MenuOrderObject3D = 3000;
 
-			//
-			// МОДУЛЬ ElementUI
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора модуля компонентов Unity UI (для упорядочивания)
+			/// Последовательность в размещении меню редактора набора для работы с 2D контентом (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderUI = 3300;
+			public const Int32 MenuOrderGraphics2D = 4000;
 
-			//
-			// МОДУЛЬ СПРАЙТОВ
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора модуля спрайтов (для упорядочивания)
+			/// Последовательность в размещении меню редактора набора для работы с визуальными эффектами (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderSprite = 3400;
-			#endregion
+			public const Int32 MenuOrderVisualEffects = 5000;
 
-			#region ======================================= НАБОР Graphics3D ==========================================
-			//---4100-5000---//
-			//
-			// ОБЩИЙ МОДУЛЬ 3D
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора общего модуля 3D (для упорядочивания)
+			/// Последовательность в размещении меню редактора набора для разработки внешней среды (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrder3DCommon = 4100;
+			public const Int32 MenuOrderEnvironment = 6000;
 
-			//
-			// МОДУЛЬ Mesh
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора модуля меша (для упорядочивания)
+			/// Последовательность в размещении меню редактора набора для работы c персонажем (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderMesh = 4200;
+			public const Int32 MenuOrderPerson = 6000;
 
-			//
-			// МОДУЛЬ Particle
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора элементов модуля системы частиц (для упорядочивания)
+			/// Последовательность в размещении меню редактора набора для работы c транспортом (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderParticle = 4300;
+			public const Int32 MenuOrderTransport = 7000;
 
-			//
-			// МОДУЛЬ Decal
-			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора элементов модуля системы декалей (для упорядочивания)
+			/// Последовательность в размещении меню редактора служебного модуля (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderDecal = 4400;
-			#endregion
-
-			#region ======================================= НАБОР Person ==============================================
-			#endregion
-
-			#region ======================================= НАБОР Service =============================================
+			public const Int32 MenuOrderService = 8000;
 			#endregion
 		}
 		//-------------------------------------------------------------------------------------------------------------

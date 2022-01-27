@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Linq;
@@ -71,6 +71,31 @@ namespace Lotus
 				}
 
 				return (path.ToString());
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Гарантирование обеспечение компонента (который может быть только один на игровом объекте)
+			/// </summary>
+			/// <param name="this">Игровой объект</param>
+			/// <param name="type_component">Тип компонента</param>
+			/// <returns>Добавленный или существующий компонент</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static Component EnsureComponent(this GameObject @this, Type type_component)
+			{
+#if UNITY_EDITOR
+				if (@this == null)
+				{
+					return null;
+				}
+#endif
+				Component component = @this.GetComponent(type_component);
+				if (component == null)
+				{
+					component = @this.AddComponent(type_component);
+				}
+
+				return component;
 			}
 			#endregion
 

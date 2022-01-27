@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -39,16 +39,18 @@ namespace Lotus
 			/// Присоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="add">Статус добавления в коллекцию</param>
 			//---------------------------------------------------------------------------------------------------------
-			void AttachOwnedObject(ILotusOwnedObject owned_object);
+			void AttachOwnedObject(ILotusOwnedObject owned_object, Boolean add);
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
 			/// Отсоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="remove">Статус удаления из коллекции</param>
 			//---------------------------------------------------------------------------------------------------------
-			void DetachOwnedObject(ILotusOwnedObject owned_object);
+			void DetachOwnedObject(ILotusOwnedObject owned_object, Boolean remove);
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
@@ -108,8 +110,9 @@ namespace Lotus
 			/// Присоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="add">Статус добавления в коллекцию</param>
 			//---------------------------------------------------------------------------------------------------------
-			public virtual void AttachOwnedObject(ILotusOwnedObject owned_object)
+			public virtual void AttachOwnedObject(ILotusOwnedObject owned_object, Boolean add)
 			{
 
 			}
@@ -119,8 +122,9 @@ namespace Lotus
 			/// Отсоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="remove">Статус удаления из коллекции</param>
 			//---------------------------------------------------------------------------------------------------------
-			public virtual void DetachOwnedObject(ILotusOwnedObject owned_object)
+			public virtual void DetachOwnedObject(ILotusOwnedObject owned_object, Boolean remove)
 			{
 
 			}

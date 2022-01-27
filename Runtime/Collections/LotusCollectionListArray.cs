@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -42,7 +42,7 @@ namespace Lotus
 		/// <typeparam name="TItem">Тип элемента списка</typeparam>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
-		public class ListArray<TItem> : IList<TItem>, IList, ILotusOwnerObject, ILotusCheckOne<TItem>,
+		public class ListArray<TItem> : IList<TItem>, IList, ILotusCheckOne<TItem>,
 			ILotusCheckAll<TItem>, ILotusVisit<TItem>, INotifyPropertyChanged, INotifyCollectionChanged
 		{
 			#region ======================================= ВНУТРЕННИЕ ТИПЫ ===========================================
@@ -143,6 +143,26 @@ namespace Lotus
 				}
 				#endregion
 			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Вспомогательный функтор для сравнения элемента
+			/// </summary>
+			//---------------------------------------------------------------------------------------------------------
+			internal sealed class FunctorComparer : IComparer<TItem>
+			{
+				Comparison<TItem> Comparison;
+
+				public FunctorComparer(Comparison<TItem> comparison)
+				{
+					this.Comparison = comparison;
+				}
+
+				public Int32 Compare(TItem x, TItem y)
+				{
+					return Comparison(x, y);
+				}
+			}
 			#endregion
 
 			#region ======================================= КОНСТАНТНЫЕ ДАННЫЕ ========================================
@@ -165,11 +185,6 @@ namespace Lotus
 			/// Статус поддержки типом элемента интерфейса <see cref="ILotusDuplicate<TItem>"/>
 			/// </summary>
 			public static readonly Boolean IsDuplicatable = typeof(TItem).IsSupportInterface<ILotusDuplicate<TItem>>();
-
-			/// <summary>
-			/// Статус поддержки типом элемента интерфейса <see cref="ILotusOwnedObject<TItem>"/>
-			/// </summary>
-			public static readonly Boolean IsOwnedObject = typeof(TItem).IsSupportInterface<ILotusOwnedObject>();
 
 			/// <summary>
 			/// Компаратор поддержки операций сравнения объектов в отношении равенства
@@ -646,123 +661,6 @@ namespace Lotus
 			}
 			#endregion
 
-			#region ======================================= МЕТОДЫ ILotusOwnerObject ==================================
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Присоединение указанного зависимого объекта
-			/// </summary>
-			/// <param name="item">Объект</param>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual void AttachOwnedObject(TItem item)
-			{
-				if (item is ILotusOwnedObject owned_object)
-				{
-					// Если владелец есть
-					if(owned_object.IOwner != null)
-					{
-						// И он не равен текущему
-						if(owned_object.IOwner != this)
-						{
-							// Отсоединяем
-							owned_object.IOwner.DetachOwnedObject(owned_object);
-						}
-					}
-
-					// Присоединяем
-					owned_object.IOwner = this;
-				}
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Присоединение указанного зависимого объекта
-			/// </summary>
-			/// <param name="owned_object">Объект</param>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual void AttachOwnedObject(ILotusOwnedObject owned_object)
-			{
-				if (owned_object != null && owned_object is TItem)
-				{
-					// Если владелец есть
-					if (owned_object.IOwner != null)
-					{
-						// И он не равен текущему
-						if (owned_object.IOwner != this)
-						{
-							// Отсоединяем
-							owned_object.IOwner.DetachOwnedObject(owned_object);
-						}
-					}
-
-					// Присоединяем
-					owned_object.IOwner = this;
-				}
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Отсоединение указанного зависимого объекта
-			/// </summary>
-			/// <param name="owned_object">Объект</param>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual void DetachOwnedObject(ILotusOwnedObject owned_object)
-			{
-				// Если данный объект подходит под тип списка
-				if (owned_object is TItem item)
-				{
-					// Ищем его
-					Int32 index = IndexOf(item);
-					if(index != -1)
-					{
-						// Удаляем
-						RemoveAt(index);
-					}
-				}
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Обновление связей для зависимых объектов
-			/// </summary>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual void UpdateOwnedObjects()
-			{
-
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Информирование данного объекта о начале изменения данных указанного объекта
-			/// </summary>
-			/// <param name="data">Объект данные которого будут меняться</param>
-			/// <param name="data_name">Имя данных</param>
-			/// <returns>Статус разрешения/согласования изменения данных</returns>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual Boolean OnNotifyUpdating(ILotusOwnedObject owned_object, System.Object data, String data_name)
-			{
-				return (true);
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Информирование данного объекта об окончании изменении данных указанного объекта
-			/// </summary>
-			/// <param name="data">Объект, данные которого изменились</param>
-			/// <param name="data_name">Имя данных</param>
-			//---------------------------------------------------------------------------------------------------------
-			public virtual void OnNotifyUpdated(ILotusOwnedObject owned_object, System.Object data, String data_name)
-			{
-				if (mIsNotify)
-				{
-					if (Array.IndexOf(mArrayOfItems, owned_object) > -1)
-					{
-						NotifyPropertyChanged(PropertyArgsIndexer);
-						NotifyCollectionChanged(NotifyCollectionChangedAction.Replace, owned_object, owned_object, -1);
-					}
-				}
-			}
-			#endregion
-
 			#region ======================================= ОБЩИЕ МЕТОДЫ ==============================================
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
@@ -1156,11 +1054,6 @@ namespace Lotus
 				mArrayOfItems[mCount] = item;
 				mCount++;
 
-				if (IsOwnedObject)
-				{
-					AttachOwnedObject(item);
-				}
-
 				if (mIsNotify)
 				{
 					if (PropertyChanged != null) PropertyChanged(this, PropertyArgsCount);
@@ -1214,11 +1107,6 @@ namespace Lotus
 					mArrayOfItems[mCount] = item;
 					mCount++;
 
-					if (IsOwnedObject)
-					{
-						AttachOwnedObject(item);
-					}
-
 					if (mIsNotify)
 					{
 						if (PropertyChanged != null) PropertyChanged(this, PropertyArgsCount);
@@ -1239,14 +1127,6 @@ namespace Lotus
 				Reserve(items.Length);
 				Array.Copy(items, 0, mArrayOfItems, mCount, items.Length);
 				mCount += items.Length;
-
-				if (IsOwnedObject)
-				{
-					for (Int32 i = 0; i < items.Length; i++)
-					{
-						AttachOwnedObject(items[i]);
-					}
-				}
 
 				if (mIsNotify)
 				{
@@ -1274,14 +1154,6 @@ namespace Lotus
 					mArrayOfItems[i + mCount] = items[i];
 				}
 				mCount += items.Count;
-
-				if (IsOwnedObject)
-				{
-					for (Int32 i = 0; i < items.Count; i++)
-					{
-						AttachOwnedObject(items[i]);
-					}
-				}
 
 				if (mIsNotify)
 				{
@@ -1324,11 +1196,6 @@ namespace Lotus
 				Array.Copy(mArrayOfItems, index, mArrayOfItems, index + 1, mCount - index);
 				mArrayOfItems[index] = item;
 				mCount++;
-
-				if (IsOwnedObject)
-				{
-					AttachOwnedObject(item);
-				}
 
 				if (mIsNotify)
 				{
@@ -1384,14 +1251,6 @@ namespace Lotus
 				Array.Copy(items, 0, mArrayOfItems, index, items.Length);
 				mCount += items.Length;
 
-				if (IsOwnedObject)
-				{
-					for (Int32 i = 0; i < items.Length; i++)
-					{
-						AttachOwnedObject(items[i]);
-					}
-				}
-
 				if (mIsNotify)
 				{
 					if (PropertyChanged != null) PropertyChanged(this, PropertyArgsCount);
@@ -1426,14 +1285,6 @@ namespace Lotus
 					mArrayOfItems[i + index] = items[i];
 				}
 				mCount += items.Count;
-
-				if (IsOwnedObject)
-				{
-					for (Int32 i = 0; i < items.Count; i++)
-					{
-						AttachOwnedObject(items[i]);
-					}
-				}
 
 				if (mIsNotify)
 				{
@@ -1980,6 +1831,68 @@ namespace Lotus
 				}
 				mCount = items.Count;
 			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Разница между элементами списка и элементами указанного списка
+			/// </summary>
+			/// <remarks>
+			/// Под разницей понимается список элементов, которые есть в исходном списке и нет в переданном. 
+			/// По-другому это те элементы из исходного списка которые необходимо удалить что бы он соответствовал 
+			/// переданному списку
+			/// </remarks>
+			/// <param name="items">Элементы</param>
+			/// <returns>Список элементов списка</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public ListArray<TItem> DifferenceItems(IList<TItem> items)
+			{
+				ListArray<TItem> difference = new ListArray<TItem>();
+
+				for (Int32 i = 0; i < mCount; i++)
+				{
+					if (items.Contains(mArrayOfItems[i]) == false)
+					{
+						difference.Add(mArrayOfItems[i]);
+					}
+				}
+
+				return (difference);
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Разница между элементами списка и элементами указанного списка
+			/// </summary>
+			/// <remarks>
+			/// Под разницей понимается список элементов, которые есть в исходном списке и нет в переданном. 
+			/// По-другому это те элементы из исходного списка которые необходимо удалить что бы он соответствовал 
+			/// переданному списку
+			/// </remarks>
+			/// <example>
+			/// Исходный список
+			/// [0, 2, 4, 7, 5]
+			/// Переданный список
+			/// [0, 4, 7, 12, 15, 7]
+			/// Результат
+			/// [2, 5]
+			/// </example>
+			/// <param name="items">Элементы</param>
+			/// <returns>Список элементов списка</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public ListArray<TItem> DifferenceItems(params TItem[] items)
+			{
+				ListArray<TItem> difference = new ListArray<TItem>();
+
+				for (Int32 i = 0; i < mCount; i++)
+				{
+					if (items.Contains(mArrayOfItems[i]) == false)
+					{
+						difference.Add(mArrayOfItems[i]);
+					}
+				}
+
+				return (difference);
+			}
 			#endregion
 
 			#region ======================================= МЕТОДЫ ПОИСКА =============================================
@@ -2051,6 +1964,40 @@ namespace Lotus
 				}
 
 				return -1;
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Поиск с начала списка элемента удовлетворяющему указанному предикату
+			/// </summary>
+			/// <param name="match">Предикат</param>
+			/// <returns>Элемент или значение по умолчанию</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public TItem Search(Predicate<TItem> match)
+			{
+				for (Int32 i = 0; i < mCount; i++)
+				{
+					if (match(mArrayOfItems[i])) { return (mArrayOfItems[i]); }
+				}
+
+				return default;
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Поиск с конца списка элемента удовлетворяющему указанному предикату
+			/// </summary>
+			/// <param name="match">Предикат</param>
+			/// <returns>Элемент или значение по умолчанию</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public TItem SearchLast(Predicate<TItem> match)
+			{
+				for (Int32 i = LastIndex; i >= 0; i--)
+				{
+					if (match(mArrayOfItems[i])) { return (mArrayOfItems[i]); }
+				}
+
+				return default;
 			}
 			#endregion
 
@@ -2293,7 +2240,9 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public virtual void Sort(Comparison<TItem> comparison)
 			{
-				Array.Sort(mArrayOfItems, comparison);
+				IComparer<TItem> comparer = new FunctorComparer(comparison);
+
+				Array.Sort(mArrayOfItems, 0, mCount, comparer);
 
 				if (mIsNotify)
 				{
@@ -2305,7 +2254,7 @@ namespace Lotus
 			#region ======================================= МЕТОДЫ БЛИЖАЙШЕГО ИНДЕКСА =================================
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Поиск ближайшего индекса элемента по его значению, не больше узнанного значения
+			/// Поиск ближайшего индекса элемента по его значению, не больше указанного значения
 			/// </summary>
 			/// <remarks>
 			/// Применяется только для списков, отсортированных по возрастанию

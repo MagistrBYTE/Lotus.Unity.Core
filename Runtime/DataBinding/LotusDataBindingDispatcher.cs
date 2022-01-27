@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -36,10 +36,25 @@ namespace Lotus
 		public static class XBindingDispatcher
 		{
 			#region ======================================= ДАННЫЕ ====================================================
+			private static List<CBindingBase> mBindings;
+			#endregion
+
+			#region ======================================= СВОЙСТВА ==================================================
 			/// <summary>
 			/// Все привязки данных
 			/// </summary>
-			public readonly static List<CBindingBase> Bindings = new List<CBindingBase>(4);
+			public static List<CBindingBase> Bindings
+			{
+				get
+				{
+					if(mBindings == null)
+					{
+						mBindings = new List<CBindingBase>();
+					}
+
+					return (mBindings);
+				}
+			}
 			#endregion
 
 			#region ======================================= МЕТОДЫ СОЗДАНИЯ ===========================================

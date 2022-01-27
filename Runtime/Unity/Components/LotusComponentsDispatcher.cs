@@ -12,7 +12,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -30,7 +30,7 @@ namespace Lotus
 		//! по различным критериям, кэшированием определенных типов компонент, упрощения типовых действий с компонентами,
 		//! а также получение интерфейсов.
 		//! Также подсистема содержит методы расширения для стандартных и пользовательских компонентов.
-		//! \ingroup Core
+		//! \ingroup CoreUnity
 		/*@{*/
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -51,13 +51,24 @@ namespace Lotus
 		public static class XComponentDispatcher
 		{
 			#region ======================================= ДАННЫЕ ====================================================
-			/// <summary>
-			/// Список кэшированных компонентов сгруппированных по типу
-			/// </summary>
-			public static readonly Dictionary<Type, List<Component>> CachedComponents = new Dictionary<Type, List<Component>>();
+			public static Dictionary<Type, List<Component>> mCachedComponents;
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
+			/// <summary>
+			/// Список кэшированных компонентов сгруппированных по типу
+			/// </summary>
+			public static Dictionary<Type, List<Component>> CachedComponents
+			{
+				get 
+				{
+					if(mCachedComponents == null)
+					{
+						mCachedComponents = new Dictionary<Type, List<Component>>(100);
+					}
+					return (mCachedComponents);
+				}
+			}
 			#endregion
 
 			#region ======================================= ОСНОВНЫЕ МЕТОДЫ ДИСПЕТЧЕРА ================================
@@ -77,7 +88,6 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static void OnInit()
 			{
-				//if (mCachedComponents == null) mCachedComponents = new Dictionary<Type, List<Component>>();
 			}
 			#endregion
 

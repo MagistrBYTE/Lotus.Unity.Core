@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -43,13 +43,24 @@ namespace Lotus
 		public static class XGameObjectDispatcher
 		{
 			#region ======================================= ДАННЫЕ ====================================================
-			/// <summary>
-			/// Список кэшированных игровых объектов на сцене сгруппированных по тегу
-			/// </summary>
-			public static readonly Dictionary<String, List<GameObject>> CachedGameObjects = new Dictionary<String, List<GameObject>>(10);
+			public static Dictionary<String, List<GameObject>> mCachedGameObjects;
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
+			/// <summary>
+			/// Список кэшированных игровых объектов на сцене сгруппированных по тегу
+			/// </summary>
+			public static Dictionary<String, List<GameObject>> CachedGameObjects
+			{
+				get 
+				{
+					if(mCachedGameObjects == null)
+					{
+						mCachedGameObjects = new Dictionary<String, List<GameObject>>(100);
+					}
+					return (mCachedGameObjects);
+				}
+			}
 			#endregion
 
 			#region ======================================= ОСНОВНЫЕ МЕТОДЫ ДИСПЕТЧЕРА ================================

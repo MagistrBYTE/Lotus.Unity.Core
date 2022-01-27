@@ -8,7 +8,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Runtime.CompilerServices;
@@ -29,25 +29,20 @@ namespace Lotus
 		{
 #if UNITY_2017_1_OR_NEWER
 			/// <summary>
-			/// Относительный путь директории исходного кода модуля Common
-			/// </summary>
-			public const String SourcePath = XEditorSettings.SourceBasisPath + "Common/";
-
-			/// <summary>
 			/// Путь в размещении меню редактора общего модуля (для упорядочивания)
 			/// </summary>
-			public const String MenuPath = XEditorSettings.MenuPlace + "Common/";
+			public const String MenuPath = XEditorSettings.MenuPlace + "Core/";
 
 			//
 			// ПОДСИСТЕМА УТИЛИТ
 			//
 			/// <summary>
-			/// Последовательность в размещении меню редактора подсистемы утилит общего модуля (для упорядочивания)
+			/// Последовательность в размещении меню редактора подсистемы утилит модуля базового ядра (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderUtility = XEditorSettings.MenuOrderCommon + 50;
+			public const Int32 MenuOrderUtility = XEditorSettings.MenuOrderCore + 50;
 
 			/// <summary>
-			/// Путь в размещении меню редактора модуля подсистемы утилит общего модуля (для упорядочивания)
+			/// Путь в размещении меню редактора модуля подсистемы утилит модуля базового ядра  (для упорядочивания)
 			/// </summary>
 			public const String MenuPathUtility = MenuPath + "BaseUtility/";
 
@@ -57,7 +52,7 @@ namespace Lotus
 			/// <summary>
 			/// Последовательность в размещении меню редактора подсистемы локализации общего модуля (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderLocalization = XEditorSettings.MenuOrderCommon + 100;
+			public const Int32 MenuOrderLocalization = XEditorSettings.MenuOrderCore + 100;
 
 			/// <summary>
 			/// Путь в размещении меню редактора модуля подсистемы локализации общего модуля (для упорядочивания)
@@ -70,7 +65,7 @@ namespace Lotus
 			/// <summary>
 			/// Последовательность в размещении меню редактора подсистемы сериализации общего модуля (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderSerialization = XEditorSettings.MenuOrderCommon + 150;
+			public const Int32 MenuOrderSerialization = XEditorSettings.MenuOrderCore + 150;
 
 			/// <summary>
 			/// Путь в размещении меню редактора модуля подсистемы сериализации общего модуля (для упорядочивания)
@@ -83,7 +78,7 @@ namespace Lotus
 			/// <summary>
 			/// Последовательность в размещении меню редактора подсистемы анимации общего модуля (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderTween = XEditorSettings.MenuOrderCommon + 200;
+			public const Int32 MenuOrderTween = XEditorSettings.MenuOrderCore + 200;
 
 			/// <summary>
 			/// Путь в размещении меню редактора модуля подсистемы анимации общего модуля (для упорядочивания)
@@ -96,7 +91,7 @@ namespace Lotus
 			/// <summary>
 			/// Последовательность в размещении меню редактора общего модуля (для упорядочивания в конце)
 			/// </summary>
-			public const Int32 MenuOrderLast = XEditorSettings.MenuOrderCommon + 250;
+			public const Int32 MenuOrderLast = XEditorSettings.MenuOrderCore + 250;
 #endif
 		}
 		//-------------------------------------------------------------------------------------------------------------

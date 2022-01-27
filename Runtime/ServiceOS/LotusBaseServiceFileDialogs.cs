@@ -5,11 +5,11 @@
 // Автор: MagistrBYTE aka DanielDem <dementevds@gmail.com>
 //---------------------------------------------------------------------------------------------------------------------
 /** \file LotusBaseServiceFileDialogs.cs
-*		Кроссплатформенные реализации диалогов открытия/сохранения файлов и директории.
+*		Определение интерфейсов для диалогов открытия/сохранения файлов и директории.
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,37 @@ namespace Lotus
 		//-------------------------------------------------------------------------------------------------------------
 		//! \addtogroup CoreServiceOS
 		/*@{*/
+		//-------------------------------------------------------------------------------------------------------------
+		/// <summary>
+		/// Интерфейс сервиса для диалогового окна открытия/сохранения файлов
+		/// </summary>
+		//-------------------------------------------------------------------------------------------------------------
+		public interface ILotusFileDialogs
+		{
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Показ диалога для открытия файла
+			/// </summary>
+			/// <param name="title">Заголовок диалога</param>
+			/// <param name="directory">Директория для открытия файла</param>
+			/// <param name="extension">Расширение файла без точки или список расширений или null</param>
+			/// <returns>Полное имя существующего файла или null</returns>
+			//---------------------------------------------------------------------------------------------------------
+			String Open(String title, String directory, String extension);
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Показ диалога для сохранения файла
+			/// </summary>
+			/// <param name="title">Заголовок диалога</param>
+			/// <param name="directory">Директория для сохранения файла</param>
+			/// <param name="default_name">Имя файла по умолчанию</param>
+			/// <param name="extension">Расширение файла без точки</param>
+			/// <returns>Полное имя файла или null</returns>
+			//---------------------------------------------------------------------------------------------------------
+			String Save(String title, String directory, String default_name, String extension);
+		}
+
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
 		/// Статический класс реализующий диалоговые окна открытия/сохранения файлов
@@ -122,57 +153,21 @@ namespace Lotus
 			/// Расширение файла по умолчанию
 			/// </summary>
 			public static String DefaultExt = XFileExtension.XML;
-			#endregion
 
-			#region ======================================= ОБЩИЕ МЕТОДЫ ==============================================
-			//---------------------------------------------------------------------------------------------------------
+			//
+			// ОСНОВНЫЕ ПАРАМЕТРЫ
+			//
+#if UNITY_2017_1_OR_NEWER
 			/// <summary>
-			/// Получение соответствующего фильтра по указанному расширению файла
+			/// Реализация сервиса для диалогового окна открытия/сохранения файлов
 			/// </summary>
-			/// <param name="extension">Расширение файла без точки</param>
-			/// <returns>Фильтр</returns>
-			//---------------------------------------------------------------------------------------------------------
-			private static String GetFilterFromExt(String extension)
-			{
-				String result = "";
-				switch (extension.ToLower())
-				{
-					case XFileExtension.TXT:
-						{
-							result = TXT_FILTER;
-						}
-						break;
-					case XFileExtension.XML:
-						{
-							result = XML_FILTER;
-						}
-						break;
-					case XFileExtension.JSON:
-						{
-							result = JSON_FILTER;
-						}
-						break;
-					case XFileExtension.LUA:
-						{
-							result = LUA_FILTER;
-						}
-						break;
-					case XFileExtension.BIN:
-						{
-							result = BIN_FILTER;
-						}
-						break;
-					case XFileExtension.BYTES:
-						{
-							result = BYTES_FILTER;
-						}
-						break;
-					default:
-						break;
-				}
-
-				return (result);
-			}
+			public static ILotusFileDialogs FileDialogs = new CFileDialogsUnity();
+#else
+			/// <summary>
+			/// Реализация сервиса для диалогового окна открытия/сохранения файлов
+			/// </summary>
+			public static ILotusFileDialogs FileDialogs;
+#endif
 			#endregion
 
 			#region ======================================= МЕТОДЫ ОТКРЫТИЯ ===========================================
@@ -184,7 +179,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Open()
 			{
-				return (Open("Открыть файл", DefaultPath, DefaultExt));
+				return (FileDialogs.Open("Открыть файл", DefaultPath, DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -196,7 +191,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Open(String title)
 			{
-				return (Open(title, DefaultPath, DefaultExt));
+				return (FileDialogs.Open(title, DefaultPath, DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -209,7 +204,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Open(String title, String directory)
 			{
-				return (Open(title, directory, DefaultExt));
+				return (FileDialogs.Open(title, directory, DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -223,72 +218,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Open(String title, String directory, String extension)
 			{
-#if (UNITY_2017_1_OR_NEWER)
-#if UNITY_EDITOR
-				return(UnityEditor.EditorUtility.OpenFilePanel(title, directory, extension));
-#else
-				return("");
-#endif
-#else
-#if USE_WINDOWS
-				// Конфигурация диалога
-				Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-				dialog.DefaultExt = extension[0] == XChar.Dot ? extension : XChar.Dot + extension;
-				dialog.Title = title;
-				dialog.InitialDirectory = directory;
-				dialog.Filter = GetFilterFromExt(extension);
-
-				// Показываем диалог открытия
-				Nullable<Boolean> result = dialog.ShowDialog();
-
-				// Если успешно
-				if (result == true)
-				{
-					return (dialog.FileName);
-				}
-#endif
-				return ("");
-#endif
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Показ диалога для открытия файла(используется спиcок расширений)
-			/// </summary>
-			/// <param name="title">Заголовок диалога</param>
-			/// <param name="extension">Список расширений или null</param>
-			/// <returns>Полное имя существующего файла или null</returns>
-			//---------------------------------------------------------------------------------------------------------
-			public static String OpenUseExtension(String title, String extension)
-			{
-#if (UNITY_2017_1_OR_NEWER)
-#if UNITY_EDITOR
-				return(UnityEditor.EditorUtility.OpenFilePanel(title, DefaultPath, extension));
-#else
-				return("");
-#endif
-#else
-#if USE_WINDOWS
-				// Конфигурация диалога
-				Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-				dialog.Title = title;
-				dialog.InitialDirectory = DefaultPath;
-				if (String.IsNullOrEmpty(extension) == false)
-				{
-					dialog.Filter = extension;
-				}
-
-				// Показываем диалог открытия
-				Nullable<Boolean> result = dialog.ShowDialog();
-
-				// Если успешно
-				if (result == true)
-				{
-					return (dialog.FileName);
-				}
-#endif
-				return ("");
-#endif
+				return (FileDialogs.Open(title, directory, extension));
 			}
 			#endregion
 
@@ -301,7 +231,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Save()
 			{
-				return (Save("Сохранить файл", DefaultPath, "Новый файл", DefaultExt));
+				return (FileDialogs.Save("Сохранить файл", DefaultPath, "Новый файл", DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -313,7 +243,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Save(String title)
 			{
-				return (Save(title, DefaultPath, "Новый файл", DefaultExt));
+				return (FileDialogs.Save(title, DefaultPath, "Новый файл", DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -326,7 +256,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Save(String title, String directory)
 			{
-				return (Save(title, directory, "Новый файл", DefaultExt));
+				return (FileDialogs.Save(title, directory, "Новый файл", DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -340,7 +270,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Save(String title, String directory, String default_name)
 			{
-				return (Save(title, directory, default_name, DefaultExt));
+				return (FileDialogs.Save(title, directory, default_name, DefaultExt));
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -355,75 +285,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static String Save(String title, String directory, String default_name, String extension)
 			{
-#if (UNITY_2017_1_OR_NEWER)
-#if UNITY_EDITOR
-				return (UnityEditor.EditorUtility.SaveFilePanel(title, directory, default_name, extension));
-#else
-				return("");
-#endif
-#else
-#if USE_WINDOWS
-				// Конфигурация диалога
-				Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-				dialog.DefaultExt = extension[0] == XChar.Dot ? extension : XChar.Dot + extension;
-				dialog.Title = title;
-				dialog.InitialDirectory = directory;
-				dialog.FileName = default_name;
-				dialog.Filter = GetFilterFromExt(extension);
-
-				// Показываем диалог открытия
-				Nullable<Boolean> result = dialog.ShowDialog();
-
-				// Если успешно
-				if (result == true)
-				{
-					return (dialog.FileName);
-				}
-#endif
-
-				return ("");
-#endif
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Показ диалога для сохранения файла (используется спиcок расширений)
-			/// </summary>
-			/// <param name="title">Заголовок диалога</param>
-			/// <param name="extension">Список расширений или null</param>
-			/// <returns>Полное имя файла или null</returns>
-			//---------------------------------------------------------------------------------------------------------
-			public static String SaveUseExtension(String title, String extension)
-			{
-#if (UNITY_2017_1_OR_NEWER)
-#if UNITY_EDITOR
-				return (UnityEditor.EditorUtility.SaveFilePanel(title, "", "", extension));
-#else
-				return("");
-#endif
-#else
-#if USE_WINDOWS
-				// Конфигурация диалога
-				Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-				dialog.Title = title;
-				if(String.IsNullOrEmpty(extension) == false)
-				{
-					dialog.Filter = extension;
-				}
-
-
-				// Показываем диалог открытия
-				Nullable<Boolean> result = dialog.ShowDialog();
-
-				// Если успешно
-				if (result == true)
-				{
-					return (dialog.FileName);
-				}
-#endif
-
-				return ("");
-#endif
+				return (FileDialogs.Save(title, directory, default_name, extension));
 			}
 			#endregion
 		}

@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.IO;
@@ -34,13 +34,24 @@ namespace Lotus
 		public static class XReflection
 		{
 			#region ======================================= ДАННЫЕ ====================================================
-			/// <summary>
-			/// Словарь кэшированных данных рефлексии по полному имени типа
-			/// </summary>
-			public static Dictionary<String, CReflectedType> Cached = new Dictionary<String, CReflectedType>(400);
+			public static Dictionary<String, CReflectedType> mCached;
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
+			/// <summary>
+			/// Словарь кэшированных данных рефлексии по полному имени типа
+			/// </summary>
+			public static Dictionary<String, CReflectedType> Cached
+			{
+				get
+				{
+					if(mCached == null)
+					{
+						mCached = new Dictionary<String, CReflectedType>(400);
+					}
+					return (mCached);
+				}
+			}
 			#endregion
 
 			#region ======================================= ОБЩИЕ МЕТОДЫ ==============================================

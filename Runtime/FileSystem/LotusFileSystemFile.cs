@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.IO;
@@ -28,7 +28,7 @@ namespace Lotus
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
-		public class CFileSystemFile : CNameable, ILotusOwnedObject, ILotusFileSystemEntity
+		public class CFileSystemFile : CNameable, ILotusOwnedObject, ILotusFileSystemEntity, ILotusViewItemOwner
 		{
 			#region ======================================= СТАТИЧЕСКИЕ ДАННЫЕ ========================================
 			//
@@ -135,7 +135,7 @@ namespace Lotus
 						if (mInfo != null)
 						{
 							mIconSource = Windows.XWindowsLoaderBitmap.GetIconFromFileTypeFromShell(mInfo.FullName,
-								Windows.XNative.SHGFI_ICON | Windows.XNative.SHGFI_SMALLICON);
+								(UInt32)(Windows.TShellAttribute.Icon | Windows.TShellAttribute.SmallIcon));
 							mIconSource = Windows.XWindowsLoaderBitmap.GetIconFromFileTypeFromExtract(mInfo.FullName);
 						}
 					}
@@ -150,10 +150,45 @@ namespace Lotus
 #endif
 			#endregion
 
+			#region ======================================= СВОЙСТВА ILotusSupportEditInspector =======================
+			/// <summary>
+			/// Отображаемое имя типа в инспекторе свойств
+			/// </summary>
+			public String InspectorTypeName
+			{
+				get { return ("ФАЙЛ"); }
+			}
+
+			/// <summary>
+			/// Отображаемое имя объекта в инспекторе свойств
+			/// </summary>
+			public String InspectorObjectName
+			{
+				get
+				{
+					if (mInfo != null)
+					{
+						return (mInfo.Name);
+					}
+					else
+					{
+						return ("");
+					}
+				}
+			}
+			#endregion
+
+			#region ======================================= СВОЙСТВА ILotusViewItemOwner ==============================
+			/// <summary>
+			/// Элемент отображения
+			/// </summary>
+			public ILotusViewItem OwnerViewItem { get; set; }
+			#endregion
+
 			#region ======================================= КОНСТРУКТОРЫ ==============================================
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Конструктор инициализирует данные узла дерева указанными значениями
+			/// Конструктор инициализирует объект класса указанными параметрами
 			/// </summary>
 			/// <param name="file_info">Данные о файле</param>
 			//---------------------------------------------------------------------------------------------------------
@@ -201,34 +236,6 @@ namespace Lotus
 			public Boolean CheckOne(Predicate<ILotusFileSystemEntity> match)
 			{
 				return (match(this));
-			}
-			#endregion
-
-			#region ======================================= СВОЙСТВА ILotusSupportEditInspector =======================
-			/// <summary>
-			/// Отображаемое имя типа в инспекторе свойств
-			/// </summary>
-			public String InspectorTypeName
-			{
-				get { return ("ФАЙЛ"); }
-			}
-
-			/// <summary>
-			/// Отображаемое имя объекта в инспекторе свойств
-			/// </summary>
-			public String InspectorObjectName
-			{
-				get
-				{
-					if(mInfo != null)
-					{
-						return (mInfo.Name);
-					}
-					else
-					{
-						return ("");
-					}
-				}
 			}
 			#endregion
 

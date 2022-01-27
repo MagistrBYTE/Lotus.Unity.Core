@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -89,40 +89,14 @@ namespace Lotus
 			/// </summary>
 			public static Vector2 DeltaPointer2;
 
-			/// <summary>
-			/// Список обработчиков событий на событие PointerDown
-			/// </summary>
-			public static readonly List<ILotusPointerDown> PointersDown = new List<ILotusPointerDown>();
-
-			/// <summary>
-			/// Список обработчиков событий на событие PointerPress
-			/// </summary>
-			public static readonly List<ILotusPointerPress> PointersPress = new List<ILotusPointerPress>();
-
-			/// <summary>
-			/// Список обработчиков событий на событие PointerMove
-			/// </summary>
-			public static readonly List<ILotusPointerMove> PointersMove = new List<ILotusPointerMove>();
-
-			/// <summary>
-			/// Список обработчиков событий на событие PointerMove
-			/// </summary>
-			public static readonly List<ILotusPointerUp> PointersUp = new List<ILotusPointerUp>();
-
-			/// <summary>
-			/// Список виртуальных кнопок
-			/// </summary>
-			public static readonly Dictionary<String, ILotusVirtualButton> Buttons = new Dictionary<String, ILotusVirtualButton>();
-
-			/// <summary>
-			/// Список виртуальных осей
-			/// </summary>
-			public static readonly Dictionary<String, ILotusVirtualAxis> Axises = new Dictionary<String, ILotusVirtualAxis>();
-
-			/// <summary>
-			/// Список виртуальных джойстиков
-			/// </summary>
-			public static readonly Dictionary<String, ILotusVirtualJoystick> Joysticks = new Dictionary<String, ILotusVirtualJoystick>();
+			// Обработчики событий
+			private static List<ILotusPointerDown> mPointersDown;
+			private static List<ILotusPointerPress> mPointersPress;
+			private static List<ILotusPointerMove> mPointersMove;
+			private static List<ILotusPointerUp> mPointersUp;
+			private static Dictionary<String, ILotusVirtualButton> mButtons;
+			private static Dictionary<String, ILotusVirtualAxis> mAxises;
+			private static Dictionary<String, ILotusVirtualJoystick> mJoysticks;
 
 			// Основная и дополнительная оси управления
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
@@ -159,6 +133,111 @@ namespace Lotus
 			public static Single DeltaPointerY
 			{
 				get { return DeltaPointer.y; }
+			}
+
+			/// <summary>
+			/// Список обработчиков событий на событие <see cref="ILotusPointerDown.PointerDown(Int32)"/> 
+			/// </summary>
+			public static List<ILotusPointerDown> PointersDown
+			{
+				get
+				{
+					if(mPointersDown == null)
+					{
+						mPointersDown = new List<ILotusPointerDown>();
+					}
+					return (mPointersDown);
+				}
+			}
+
+			/// <summary>
+			/// Список обработчиков событий на событие <see cref="ILotusPointerPress.PointerPress(Int32)"/> 
+			/// </summary>
+			public static List<ILotusPointerPress> PointersPress
+			{
+				get
+				{
+					if (mPointersPress == null)
+					{
+						mPointersPress = new List<ILotusPointerPress>();
+					}
+					return (mPointersPress);
+				}
+			}
+
+			/// <summary>
+			/// Список обработчиков событий на событие <see cref="ILotusPointerMove.PointerMove(Int32)"/>
+			/// </summary>
+			public static List<ILotusPointerMove> PointersMove
+			{
+				get
+				{
+					if (mPointersMove == null)
+					{
+						mPointersMove = new List<ILotusPointerMove>();
+					}
+					return (mPointersMove);
+				}
+			}
+
+			/// <summary>
+			/// Список обработчиков событий на событие <see cref="ILotusPointerUp.PointerUp(Int32)"/>
+			/// </summary>
+			public static List<ILotusPointerUp> PointersUp
+			{
+				get
+				{
+					if (mPointersUp == null)
+					{
+						mPointersUp = new List<ILotusPointerUp>();
+					}
+					return (mPointersUp);
+				}
+			}
+
+			/// <summary>
+			/// Список виртуальных кнопок
+			/// </summary>
+			public static Dictionary<String, ILotusVirtualButton> Buttons
+			{
+				get
+				{
+					if (mButtons == null)
+					{
+						mButtons = new Dictionary<String, ILotusVirtualButton>();
+					}
+					return (mButtons);
+				}
+			}
+
+			/// <summary>
+			/// Список виртуальных осей
+			/// </summary>
+			public static Dictionary<String, ILotusVirtualAxis> Axises
+			{
+				get
+				{
+					if (mAxises == null)
+					{
+						mAxises = new Dictionary<String, ILotusVirtualAxis>();
+					}
+					return (mAxises);
+				}
+			}
+
+			/// <summary>
+			/// Список виртуальных джойстиков
+			/// </summary>
+			public static Dictionary<String, ILotusVirtualJoystick> Joysticks
+			{
+				get
+				{
+					if (mJoysticks == null)
+					{
+						mJoysticks = new Dictionary<String, ILotusVirtualJoystick>();
+					}
+					return (mJoysticks);
+				}
 			}
 			#endregion
 

@@ -4,12 +4,12 @@
 // Подраздел: Подсистема расширения функциональности редактора Unity
 // Автор: MagistrBYTE aka DanielDem <dementevds@gmail.com>
 //---------------------------------------------------------------------------------------------------------------------
-/** \file LotusTreeNodeView.cs
+/** \file LotusTreeViewControl.cs
 *		Элемент для отображения дерева для редактора Unity.
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 #if UNITY_EDITOR
 //=====================================================================================================================
@@ -86,6 +86,23 @@ namespace Lotus
 			public CViewItemHierarchyObject SelectedNode
 			{
 				get { return (mSelectedNode); }
+			}
+
+
+			/// <summary>
+			/// Текущий выбранный узел отображения
+			/// </summary>
+			public CFileSystemDirectory SelectedDirectory
+			{
+				get { return (mSelectedNode.DataContext as CFileSystemDirectory); }
+			}
+
+			/// <summary>
+			/// Текущий выбранный узел отображения
+			/// </summary>
+			public CFileSystemFile SelectedFile
+			{
+				get { return (mSelectedNode.DataContext as CFileSystemFile); }
 			}
 
 			//

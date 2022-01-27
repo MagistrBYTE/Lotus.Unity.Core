@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections;
@@ -116,12 +116,7 @@ namespace Lotus
 			/// <summary>
 			/// Четырехмерный объект данных
 			/// </summary>
-			Vector4D,
-
-			/// <summary>
-			/// Прямоугольник
-			/// </summary>
-			Rect
+			Vector4D
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -129,7 +124,8 @@ namespace Lotus
 		/// Определение интерфейса для представления параметра - объекта который содержит данные в формате имя=значения
 		/// </summary>
 		//-------------------------------------------------------------------------------------------------------------
-		public interface IParameterItem : ICloneable, ILotusNameable, ILotusIdentifierId, ILotusOwnedObject, ILotusNotCalculation, ILotusVerified
+		public interface IParameterItem : ICloneable, ILotusNameable, ILotusIdentifierId, ILotusOwnedObject, 
+			ILotusNotCalculation, ILotusVerified
 		{
 			#region ======================================= СВОЙСТВА ==================================================
 			//
@@ -223,7 +219,7 @@ namespace Lotus
 			//
 			// Основные параметры
 			protected static readonly PropertyChangedEventArgs PropertyArgsName = new PropertyChangedEventArgs(nameof(Name));
-			protected static readonly PropertyChangedEventArgs PropertyArgsID = new PropertyChangedEventArgs(nameof(Id));
+			protected static readonly PropertyChangedEventArgs PropertyArgsId = new PropertyChangedEventArgs(nameof(Id));
 			protected static readonly PropertyChangedEventArgs PropertyArgsIValue = new PropertyChangedEventArgs(nameof(Value));
 			protected static readonly PropertyChangedEventArgs PropertyArgsValue = new PropertyChangedEventArgs(nameof(Value));
 			protected static readonly PropertyChangedEventArgs PropertyArgsIsActive = new PropertyChangedEventArgs(nameof(IsActive));
@@ -244,7 +240,7 @@ namespace Lotus
 			// Основные параметры
 			protected internal String mName;
 			protected internal TValue mValue;
-			protected internal Int32 mID;
+			protected internal Int64 mId;
 			protected internal Int32 mData;
 
 			// Расчеты
@@ -320,13 +316,13 @@ namespace Lotus
 			/// Уникальный идентификатор параметра
 			/// </summary>
 			[XmlAttribute]
-			public Int32 Id
+			public Int64 Id
 			{
-				get { return (mID); }
+				get { return (mId); }
 				set
 				{
-					mID = value;
-					NotifyPropertyChanged(PropertyArgsID);
+					mId = value;
+					NotifyPropertyChanged(PropertyArgsId);
 					if (mOwner != null) mOwner.OnNotifyUpdated(this, Id, nameof(Id));
 				}
 			}
@@ -501,10 +497,10 @@ namespace Lotus
 			/// </summary>
 			/// <param name="id">Идентификатор параметра</param>
 			//---------------------------------------------------------------------------------------------------------
-			protected ParameterItem(Int32 id)
+			protected ParameterItem(Int64 id)
 			{
 				mName = "";
-				mID = id;
+				mId = id;
 				mData = 0;
 			}
 			#endregion
@@ -530,7 +526,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public override Int32 GetHashCode()
 			{
-				return (this.Name.GetHashCode() ^ mID.GetHashCode());
+				return (this.Name.GetHashCode() ^ mId.GetHashCode());
 			}
 
 			//---------------------------------------------------------------------------------------------------------

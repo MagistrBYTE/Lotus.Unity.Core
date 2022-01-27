@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace Lotus
 	namespace Core
 	{
 		//-------------------------------------------------------------------------------------------------------------
-		//! \addtogroup UnityCommon
+		//! \addtogroup CoreUnity
 		/*@{*/
 		//-------------------------------------------------------------------------------------------------------------
 		/// <summary>
@@ -40,7 +40,7 @@ namespace Lotus
 		/// </remarks>
 		//-------------------------------------------------------------------------------------------------------------
 		[Serializable]
-		[AddComponentMenu("Lotus/Common/System Dispatcher")]
+		[AddComponentMenu("Lotus/Core/System Dispatcher")]
 		[LotusExecutionOrder(5)]
 		public class LotusSystemDispatcher : LotusSystemSingleton<LotusSystemDispatcher>, ISerializationCallbackReceiver,
 			ILotusSingleton, ILotusMessageHandler
@@ -546,31 +546,12 @@ namespace Lotus
 			public void Reset()
 			{
 				//
-				// КОНСОЛЬ
+				// БАЗОВОЕ ЯДРО
 				//
+
 				// Лог (для дальнейшего логирования)
 				XConsoleDispatcher.OnResetEditor();
 
-				//
-				// БАЗОВОЕ ЯДРО
-				//
-				// Подсистема сообщений
-				XMessageDispatcher.OnResetEditor();
-
-				// Подсистема задач
-				XTaskDispatcher.OnResetEditor();
-
-				// Подсистема сериализации данных
-				//XSerializationDispatcher.OnResetEditor();
-
-				//
-				// МОДУЛЬ МАТЕМАТИЧЕСКОЙ СИСТЕМЫ
-				//
-				//XMathFast.OnResetEditor();
-
-				//
-				// МОДУЛЬ ОБЩЕЙ ФУНКЦИОНАЛЬНОСТИ
-				//
 				// Подсистема ввода
 				XInputDispatcher.OnResetEditor();
 
@@ -582,9 +563,6 @@ namespace Lotus
 
 				// Инициализация центрального диспетчера ресурсов
 				XResourcesDispatcher.OnResetEditor();
-
-				// Подсистема сериализации данных для Unity
-				XSerializationDispatcherUnity.OnResetEditor();
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -607,31 +585,11 @@ namespace Lotus
 				if (!CheckDublicate())
 				{
 					//
-					// КОНСОЛЬ
+					// БАЗОВОЕ ЯДРО
 					//
 					// Лог (для дальнейшего логирования)
 					XConsoleDispatcher.OnInit();
 
-					//
-					// БАЗОВОЕ ЯДРО
-					//
-					// Подсистема сообщений
-					XMessageDispatcher.OnInit();
-
-					// Подсистема задач
-					XTaskDispatcher.OnInit();
-
-					// Подсистема сериализации данных
-					//XSerializationDispatcher.OnInit();
-
-					//
-					// МОДУЛЬ МАТЕМАТИЧЕСКОЙ СИСТЕМЫ
-					//
-					//XMathFast.OnInit();
-
-					//
-					// МОДУЛЬ ОБЩЕЙ ФУНКЦИОНАЛЬНОСТИ
-					//
 					// Подсистема ввода
 					XInputDispatcher.OnInit();
 
@@ -643,9 +601,6 @@ namespace Lotus
 
 					// Инициализация центрального диспетчера ресурсов
 					XResourcesDispatcher.OnInit();
-
-					// Подсистема сериализации данных для Unity
-					XSerializationDispatcherUnity.OnInit();
 				}
 
 				if (mIsDontDestroy)
@@ -661,7 +616,6 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public void OnEnable()
 			{
-				XMessageDispatcher.RegisterMessageHandler(this);
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -697,12 +651,6 @@ namespace Lotus
 
 				// Обработка событий ввода
 				XInputDispatcher.OnUpdate();
-
-				// Обработка сообщений
-				XMessageDispatcher.OnUpdate();
-
-				// Обработка механизма исполнения задач
-				XTaskDispatcher.OnUpdate();
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -754,7 +702,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public void OnDisable()
 			{
-				XMessageDispatcher.UnRegisterMessageHandler(this);
+
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -811,9 +759,9 @@ namespace Lotus
 			/// Основной метод для обработки сообщения
 			/// </summary>
 			/// <param name="args">Аргументы сообщения</param>
-			/// <returns>Статус успешности обработки сообщений</returns>
+			/// <returns>Код обработки собщения</returns>
 			//---------------------------------------------------------------------------------------------------------
-			public Boolean OnMessageHandler(CMessageArgs args)
+			public Int32 OnMessageHandler(CMessageArgs args)
 			{
 				Boolean status = false;
 				if (args is CMessageConsole)
@@ -845,7 +793,7 @@ namespace Lotus
 					}
 				}
 
-				return (status);
+				return (10);
 			}
 			#endregion
 

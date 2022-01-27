@@ -11,7 +11,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -316,112 +316,6 @@ namespace Lotus
 #endif
 				return null;
 			}
-			#endregion
-
-			#region ======================================= МЕТОДЫ ЗАГРУЗКИ ===========================================
-			////---------------------------------------------------------------------------------------------------------
-			///// <summary>
-			///// Загрузка ресурса по имени
-			///// </summary>
-			///// <remarks>
-			///// Поиск осуществляется по списку идентификаторов ресурсов
-			///// </remarks>
-			///// <param name="name">Имя ресурса</param>
-			///// <returns>Загруженный ресурс</returns>
-			////---------------------------------------------------------------------------------------------------------
-			//public static UnityEngine.Object LoadFromName(String name)
-			//{
-			//	if(ProjectSetting != null && ProjectSetting.LoadableResourcesID != null)
-			//	{
-			//		for (Int32 i = 0; i < ProjectSetting.LoadableResourcesID.Count; i++)
-			//		{
-			//			if(ProjectSetting.LoadableResourcesID[i].Name == name)
-			//			{
-			//				return(Resources.Load(ProjectSetting.LoadableResourcesID[i].Path));
-			//			}
-			//		}
-			//	}
-
-			//	return null;
-			//}
-
-			////---------------------------------------------------------------------------------------------------------
-			///// <summary>
-			///// Загрузка ресурса по идентификатору
-			///// </summary>
-			///// <remarks>
-			///// Поиск осуществляется по списку идентификаторов ресурсов
-			///// </remarks>
-			///// <param name="id">Идентификатор ресурса</param>
-			///// <returns>Загруженный ресурс</returns>
-			////---------------------------------------------------------------------------------------------------------
-			//public static UnityEngine.Object LoadFromId(Int32 id)
-			//{
-			//	if (ProjectSetting != null && ProjectSetting.LoadableResourcesID != null)
-			//	{
-			//		for (Int32 i = 0; i < ProjectSetting.LoadableResourcesID.Count; i++)
-			//		{
-			//			if (ProjectSetting.LoadableResourcesID[i].ID == id)
-			//			{
-			//				return (Resources.Load(ProjectSetting.LoadableResourcesID[i].Path));
-			//			}
-			//		}
-			//	}
-
-			//	return null;
-			//}
-
-			////---------------------------------------------------------------------------------------------------------
-			///// <summary>
-			///// Получение идентификатора ресурса по имени
-			///// </summary>
-			///// <remarks>
-			///// Поиск осуществляется по списку идентификаторов ресурсов
-			///// </remarks>
-			///// <param name="name">Имя ресурса</param>
-			///// <returns>Идентификатор ресурса</returns>
-			////---------------------------------------------------------------------------------------------------------
-			//public static CResourceId GetResourceId(String name)
-			//{
-			//	if (ProjectSetting != null && ProjectSetting.LoadableResourcesID != null)
-			//	{
-			//		for (Int32 i = 0; i < ProjectSetting.LoadableResourcesID.Count; i++)
-			//		{
-			//			if (ProjectSetting.LoadableResourcesID[i].Name == name)
-			//			{
-			//				return (ProjectSetting.LoadableResourcesID[i]);
-			//			}
-			//		}
-			//	}
-
-			//	return null;
-			//}
-
-			////---------------------------------------------------------------------------------------------------------
-			///// <summary>
-			///// Получение идентификатора ресурса по идентификатору
-			///// </summary>
-			///// <remarks>
-			///// Поиск осуществляется по списку идентификаторов ресурсов
-			///// </remarks>
-			///// <param name="id">Идентификатор ресурса</param>
-			///// <returns>Идентификатор ресурса</returns>
-			////---------------------------------------------------------------------------------------------------------
-			//public static CResourceId GetResourceId(Int32 id)
-			//{
-			//	if (ProjectSetting != null && ProjectSetting.LoadableResourcesID != null)
-			//	{
-			//		for (Int32 i = 0; i < ProjectSetting.LoadableResourcesID.Count; i++)
-			//		{
-			//			if (ProjectSetting.LoadableResourcesID[i].ID == id)
-			//			{
-			//				return (ProjectSetting.LoadableResourcesID[i]);
-			//			}
-			//		}
-			//	}
-
-			//	return null;
-			//}
 			#endregion
 		}
 		//-------------------------------------------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.Text.Json;
@@ -223,7 +223,7 @@ namespace Lotus
 			#region ======================================= КОНСТРУКТОРЫ ==============================================
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Конструктор инициализирует данные узла дерева указанными значениями
+			/// Конструктор инициализирует объект класса указанными параметрами
 			/// </summary>
 			/// <param name="directory_info">Информация о директории</param>
 			//---------------------------------------------------------------------------------------------------------
@@ -234,7 +234,7 @@ namespace Lotus
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Конструктор инициализирует данные узла дерева указанными значениями
+			/// Конструктор инициализирует объект класса указанными параметрами
 			/// </summary>
 			/// <param name="full_path">Полный путь к директории</param>
 			//---------------------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ namespace Lotus
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Конструктор инициализирует данные узла дерева указанными значениями
+			/// Конструктор инициализирует объект класса указанными параметрами
 			/// </summary>
 			/// <param name="display_name">Название узла</param>
 			/// <param name="directory_info">Информация о директории</param>
@@ -287,8 +287,9 @@ namespace Lotus
 			/// Присоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="add">Статус добавления в коллекцию</param>
 			//---------------------------------------------------------------------------------------------------------
-			public void AttachOwnedObject(ILotusOwnedObject owned_object)
+			public void AttachOwnedObject(ILotusOwnedObject owned_object, Boolean add)
 			{
 
 			}
@@ -298,8 +299,9 @@ namespace Lotus
 			/// Отсоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="remove">Статус удаления из коллекции</param>
 			//---------------------------------------------------------------------------------------------------------
-			public void DetachOwnedObject(ILotusOwnedObject owned_object)
+			public void DetachOwnedObject(ILotusOwnedObject owned_object, Boolean remove)
 			{
 
 			}
@@ -564,6 +566,7 @@ namespace Lotus
 			/// <summary>
 			/// Получение файлов и дочерних директорий в текущей директории и всех дочерних директориях
 			/// </summary>
+			/// <returns>Статус получение файлов</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public Boolean AddFileSystemItemsTwoLevel()
 			{
@@ -791,23 +794,51 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public void Copy(String path, Boolean is_directory_name)
 			{
-				//for (Int32 i = 0; i < IModels.Count; i++)
-				//{
-				//	CFileSystemFile file_node = IModels[i] as CFileSystemFile;
-				//	if (file_node != null)
-				//	{
-				//		if (is_directory_name)
-				//		{
-				//			String dest_path = Path.Combine(path, Info.Name, file_node.Info.Name) + file_node.Info.Extension;
-				//			File.Copy(file_node.Info.FullName, dest_path);
-				//		}
-				//		else
-				//		{
-				//			String dest_path = path + file_node.Info.Name + file_node.Info.Extension;
-				//			File.Copy(file_node.Info.FullName, dest_path);
-				//		}
-				//	}
-				//}
+				if(is_directory_name)
+				{
+					String dest_path_dir = Path.Combine(path, Info.Name);
+					if (Directory.Exists(dest_path_dir) == false)
+					{
+						Directory.CreateDirectory(dest_path_dir);
+					}
+				}
+
+				for (Int32 i = 0; i < mEntities.Count; i++)
+				{
+					CFileSystemFile file_node = mEntities[i] as CFileSystemFile;
+					if (file_node != null)
+					{
+						if(file_node.OwnerViewItem != null)
+						{
+							if (file_node.OwnerViewItem.IsChecked.HasValue && file_node.OwnerViewItem.IsChecked.Value)
+							{
+								if (is_directory_name)
+								{
+									String dest_path = Path.Combine(path, Info.Name, file_node.Info.Name);
+									File.Copy(file_node.Info.FullName, dest_path);
+								}
+								else
+								{
+									String dest_path = Path.Combine(path, file_node.Info.Name);
+									File.Copy(file_node.Info.FullName, dest_path);
+								}
+							}
+						}
+						else
+						{
+							if (is_directory_name)
+							{
+								String dest_path = Path.Combine(path, Info.Name, file_node.Info.Name);
+								File.Copy(file_node.Info.FullName, dest_path);
+							}
+							else
+							{
+								String dest_path = Path.Combine(path, file_node.Info.Name);
+								File.Copy(file_node.Info.FullName, dest_path);
+							}
+						}
+					}
+				}
 			}
 			#endregion
 		}

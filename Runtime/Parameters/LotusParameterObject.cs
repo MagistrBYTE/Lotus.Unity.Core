@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 04.04.2021
+// Последнее изменение от 30.01.2022
 //=====================================================================================================================
 using System;
 using System.ComponentModel;
@@ -55,6 +55,40 @@ namespace Lotus
 			/// </summary>
 			//---------------------------------------------------------------------------------------------------------
 			public CParameters()
+			{
+				mValue = new ListArray<IParameterItem>();
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Конструктор инициализирует объект класса указанными параметрами
+			/// </summary>
+			/// <param name="parameters">Список параметров</param>
+			//---------------------------------------------------------------------------------------------------------
+			public CParameters(params IParameterItem[] parameters)
+			{
+				if (parameters != null && parameters.Length > 0)
+				{
+					for (Int32 i = 0; i < parameters.Length; i++)
+					{
+						if (parameters[i] != null)
+						{
+							parameters[i].IOwner = this;
+						}
+					}
+				}
+
+				mValue = new ListArray<IParameterItem>(parameters);
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Конструктор инициализирует объект класса указанными параметрами
+			/// </summary>
+			/// <param name="parameter_name">Имя параметра</param>
+			//---------------------------------------------------------------------------------------------------------
+			public CParameters(String parameter_name)
+				: base(parameter_name)
 			{
 				mValue = new ListArray<IParameterItem>();
 			}
@@ -114,8 +148,9 @@ namespace Lotus
 			/// Присоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="add">Статус добавления в коллекцию</param>
 			//---------------------------------------------------------------------------------------------------------
-			public virtual void AttachOwnedObject(ILotusOwnedObject owned_object)
+			public virtual void AttachOwnedObject(ILotusOwnedObject owned_object, Boolean add)
 			{
 
 			}
@@ -125,8 +160,9 @@ namespace Lotus
 			/// Отсоединение указанного зависимого объекта
 			/// </summary>
 			/// <param name="owned_object">Объект</param>
+			/// <param name="remove">Статус удаления из коллекции</param>
 			//---------------------------------------------------------------------------------------------------------
-			public virtual void DetachOwnedObject(ILotusOwnedObject owned_object)
+			public virtual void DetachOwnedObject(ILotusOwnedObject owned_object, Boolean remove)
 			{
 
 			}
@@ -270,11 +306,31 @@ namespace Lotus
 			/// </summary>
 			/// <param name="parameter_name">Имя параметра</param>
 			/// <param name="parameter_value">Значение параметра</param>
+			/// <param name="allow_duplicates">Разрешить дубликаты объектов</param>
 			/// <returns>Текущий список параметров</returns>
 			//---------------------------------------------------------------------------------------------------------
-			public CParameters AddObject(String parameter_name, System.Object parameter_value)
+			public CParameters AddObject(String parameter_name, System.Object parameter_value, Boolean allow_duplicates)
 			{
-				mValue.Add(new CParameterObject(parameter_name, parameter_value));
+				if (allow_duplicates)
+				{
+					mValue.Add(new CParameterObject(parameter_name, parameter_value));
+				}
+				else
+				{
+					// Смотрим есть ли объект с таким значением и именем
+					for (Int32 i = 0; i < Value.Count; i++)
+					{
+						if(Value[i].ValueType == TParameterValueType.Object &&
+							Value[i].Value == parameter_value &&
+							Value[i].Name == parameter_name)
+						{
+							return (this);
+						}
+					}
+
+					// Если нет то добавялем
+					mValue.Add(new CParameterObject(parameter_name, parameter_value));
+				}
 				return (this);
 			}
 			#endregion
@@ -514,7 +570,7 @@ namespace Lotus
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
-			/// Обновление значения вещественного параметра с указанным именем
+			/// Обновление значения строкового параметра с указанным именем
 			/// </summary>
 			/// <param name="parameter_name">Имя параметра</param>
 			/// <param name="new_value">Новое значение параметра</param>
@@ -673,8 +729,6 @@ namespace Lotus
 						case TParameterValueType.Vector3D:
 							break;
 						case TParameterValueType.Vector4D:
-							break;
-						case TParameterValueType.Rect:
 							break;
 						default:
 							break;
