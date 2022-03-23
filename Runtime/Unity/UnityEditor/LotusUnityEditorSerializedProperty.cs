@@ -9,7 +9,7 @@
 */
 //---------------------------------------------------------------------------------------------------------------------
 // Версия: 1.0.0.0
-// Последнее изменение от 30.01.2022
+// Последнее изменение от 27.03.2022
 //=====================================================================================================================
 using System;
 using System.Linq;
@@ -40,7 +40,7 @@ namespace Lotus
 			/// <summary>
 			/// Имя внутреннего массива для всех типов коллекций системы Lotus
 			/// </summary>
-			public const String NAME_CUBEX_ARRAY = nameof(ListArray<Int32>.mArrayOfItems);
+			public const String NAME_LOTUS_ARRAY = nameof(ListArray<Int32>.mArrayOfItems);
 
 			/// <summary>
 			/// Имя суффикса массива
@@ -1606,7 +1606,7 @@ namespace Lotus
 				{
 					if (property.propertyType == UnityEditor.SerializedPropertyType.Generic)
 					{
-						if (property.FindPropertyRelative(NAME_CUBEX_ARRAY) != null)
+						if (property.FindPropertyRelative(NAME_LOTUS_ARRAY) != null)
 						{
 							return (true);
 						}
@@ -1663,7 +1663,7 @@ namespace Lotus
 			{
 				if (property.propertyType == UnityEditor.SerializedPropertyType.Generic)
 				{
-					if (property.FindPropertyRelative(NAME_CUBEX_ARRAY) != null)
+					if (property.FindPropertyRelative(NAME_LOTUS_ARRAY) != null)
 					{
 						return (true);
 					}
@@ -1681,7 +1681,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			public static UnityEditor.SerializedProperty GetLotusInnerCollection(this UnityEditor.SerializedProperty property)
 			{
-				return (property.FindPropertyRelative(NAME_CUBEX_ARRAY));
+				return (property.FindPropertyRelative(NAME_LOTUS_ARRAY));
 			}
 			#endregion
 
