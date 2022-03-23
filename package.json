@@ -1,6 +1,6 @@
 {
     "name": "com.magistrbyte.lotus.unity.core",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "displayName": "Lotus.Unity.Core",
     "description": "Lotus Core library for Unity",
     "unity": "2019.1",
