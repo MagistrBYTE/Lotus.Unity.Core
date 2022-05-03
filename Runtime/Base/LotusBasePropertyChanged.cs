@@ -35,9 +35,9 @@ namespace Lotus
 		public interface ILotusNotifyPropertyChanged
 		{
 			/// <summary>
-			/// Событие для нотификации об изменении значения свойства. Аргумент - имя свойства и его новое значение
+			/// Событие для нотификации об изменении значения свойства. Аргумент - источник события, имя свойства и его новое значение
 			/// </summary>
-			Action<String, System.Object> OnPropertyChanged { get; set; }
+			Action<System.Object, String, System.Object> OnPropertyChanged { get; set; }
 		}
 
 		//-------------------------------------------------------------------------------------------------------------

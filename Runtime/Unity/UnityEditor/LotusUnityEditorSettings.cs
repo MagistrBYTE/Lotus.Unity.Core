@@ -14,10 +14,6 @@
 using System;
 using System.Runtime.CompilerServices;
 //=====================================================================================================================
-// Обеспечивает дружественность для сборки редакторов
-[assembly: InternalsVisibleToAttribute("Assembly-CSharp-Editor")]
-[assembly: InternalsVisibleToAttribute("Lotus.Core.Unity.Editor")]
-//=====================================================================================================================
 namespace Lotus
 {
 	namespace Core
@@ -66,59 +62,69 @@ namespace Lotus
 			/// <summary>
 			/// Относительный путь директории исходного кода платформы Lotus
 			/// </summary>
-			public const String SourcePath = MainPath + "Runtime/";
+			public const String SourcePath = "Runtime/";
 
 			/// <summary>
 			/// Относительный путь директории исходного кода модуля Core
 			/// </summary>
-			public const String SourceCorePath = SourcePath + "Lotus.Core/";
+			public const String SourceCorePath = MainPath + "Lotus.Core/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода модуля Math
 			/// </summary>
-			public const String SourceMathPath = SourcePath + "Lotus.Math/";
+			public const String SourceMathPath = MainPath + "Lotus.Math/" + SourcePath;
 
 			/// <summary>
-			/// Относительный путь директории исходного кода модуля Object3D
+			/// Относительный путь директории исходного кода модуля Algorithm
 			/// </summary>
-			public const String SourceObject3DPath = SourcePath + "Lotus.Object3D/";
+			public const String SourceAlgorithmPath = MainPath + "Lotus.Algorithm/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Graphics2D
 			/// </summary>
-			public const String SourceGraphics2DPath = SourcePath + "Lotus.Graphics2D/";
+			public const String SourceGraphics2DPath = MainPath + "Lotus.Graphics2D/" + SourcePath;
+
+			/// <summary>
+			/// Относительный путь директории исходного кода модуля Object3D
+			/// </summary>
+			public const String SourceObject3DPath = MainPath + "Lotus.Object3D/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора VisualEffects
 			/// </summary>
-			public const String SourceGraphics3DPath = SourcePath + "Lotus.VisualEffects/";
+			public const String SourceGraphics3DPath = MainPath + "Lotus.VisualEffects/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Environment
 			/// </summary>
-			public const String SourceEnvironmentPath = SourcePath + "Lotus.Environment/";
+			public const String SourceEnvironmentPath = MainPath + "Lotus.Environment/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Person
 			/// </summary>
-			public const String SourcePersonPath = SourcePath + "Lotus.Person/";
+			public const String SourceCharacterPath = MainPath + "Lotus.Character/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода набора Transport
 			/// </summary>
-			public const String SourceTransportPath = SourcePath + "Lotus.Transport/";
+			public const String SourceTransportPath = MainPath + "Lotus.Transport/" + SourcePath;
 
 			/// <summary>
 			/// Относительный путь директории исходного кода модуля Service
 			/// </summary>
-			public const String SourceServicePath = SourcePath + "Lotus.Service/";
+			public const String SourceServicePath = MainPath + "Lotus.Service/" + SourcePath;
 			#endregion
 
 			#region ======================================= БАЗОВЫЕ ПУТИ К РЕСУРСАМ ===================================
 			/// <summary>
 			/// Базовая директория для загрузки ресурсов Lotus в режиме редактора
 			/// </summary>
-			public const String ResourcesPath = MainPath + "Resources/";
+			public const String ResourcesPath = "";
+
+			/// <summary>
+			/// Директория для загрузки данных в режиме редактора
+			/// </summary>
+			public const String ResourcesDataPath = ResourcesPath + "Data/";
 
 			/// <summary>
 			/// Директория для загрузки аудиоресурсов Lotus в режиме редактора
@@ -189,14 +195,14 @@ namespace Lotus
 			public const Int32 MenuOrderAlgorithm = 2000;
 
 			/// <summary>
-			/// Последовательность в размещении меню редактора модуля для работы с 3D контентом (для упорядочивания)
-			/// </summary>
-			public const Int32 MenuOrderObject3D = 3000;
-
-			/// <summary>
 			/// Последовательность в размещении меню редактора набора для работы с 2D контентом (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderGraphics2D = 4000;
+			public const Int32 MenuOrderGraphics2D = 3000;
+
+			/// <summary>
+			/// Последовательность в размещении меню редактора модуля для работы с 3D контентом (для упорядочивания)
+			/// </summary>
+			public const Int32 MenuOrderObject3D = 4000;
 
 			/// <summary>
 			/// Последовательность в размещении меню редактора набора для работы с визуальными эффектами (для упорядочивания)
@@ -211,7 +217,7 @@ namespace Lotus
 			/// <summary>
 			/// Последовательность в размещении меню редактора набора для работы c персонажем (для упорядочивания)
 			/// </summary>
-			public const Int32 MenuOrderPerson = 6000;
+			public const Int32 MenuOrderCharacter = 6000;
 
 			/// <summary>
 			/// Последовательность в размещении меню редактора набора для работы c транспортом (для упорядочивания)

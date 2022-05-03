@@ -47,10 +47,6 @@ namespace Lotus
 			#region ======================================= ДАННЫЕ ====================================================
 			protected internal ILotusOwnerObject mOwner;
 			protected internal FileInfo mInfo;
-
-#if USE_WINDOWS
-			protected internal System.Windows.Media.ImageSource mIconSource;
-#endif
 			#endregion
 
 			#region ======================================= СВОЙСТВА ==================================================
@@ -121,33 +117,6 @@ namespace Lotus
 				get { return (mInfo); }
 				set { mInfo = value; }
 			}
-
-#if USE_WINDOWS
-			/// <summary>
-			/// Графическая иконка связанная с данным элементом файловой системы
-			/// </summary>
-			public System.Windows.Media.ImageSource IconSource 
-			{ 
-				get
-				{
-					if(mIconSource == null)
-					{
-						if (mInfo != null)
-						{
-							mIconSource = Windows.XWindowsLoaderBitmap.GetIconFromFileTypeFromShell(mInfo.FullName,
-								(UInt32)(Windows.TShellAttribute.Icon | Windows.TShellAttribute.SmallIcon));
-							mIconSource = Windows.XWindowsLoaderBitmap.GetIconFromFileTypeFromExtract(mInfo.FullName);
-						}
-					}
-
-					return (mIconSource);
-				}
-				set 
-				{ 
-					mIconSource = value;
-				}
-			}
-#endif
 			#endregion
 
 			#region ======================================= СВОЙСТВА ILotusSupportEditInspector =======================

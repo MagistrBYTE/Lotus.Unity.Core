@@ -394,7 +394,7 @@ namespace Lotus
 				WriteGameObjectTransformToXml(writer, game_object);
 
 				// 3) Проверяем на префаб
-				UnityEditor.PrefabType prefab_type = UnityEditor.PrefabUtility.GetPrefabType(game_object);
+				//UnityEditor.PrefabType prefab_type = UnityEditor.PrefabUtility.GetPrefabType(game_object);
 
 				// 4) Сохраняем все компоненты
 				Component[] components = game_object.GetComponents<Component>();

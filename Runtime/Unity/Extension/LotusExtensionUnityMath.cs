@@ -331,6 +331,18 @@ namespace Lotus
 			{
 				return String.Format("{0};{1};{2};{3}", @this.x, @this.y, @this.z, @this.w);
 			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
+			/// Конвертация в тип <see cref="UnityEngine.RectOffset"/>
+			/// </summary>
+			/// <param name="this">Четырехмерный вектор</param>
+			/// <returns>Объект RectOffset</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static RectOffset ToRectOffset(this Vector4 @this)
+			{
+				return new RectOffset((Int32)@this.x, (Int32)@this.z, (Int32)@this.y, (Int32)@this.w);
+			}
 		}
 
 		//-------------------------------------------------------------------------------------------------------------

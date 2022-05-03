@@ -178,6 +178,25 @@ namespace Lotus
 
 			//---------------------------------------------------------------------------------------------------------
 			/// <summary>
+			/// Получение списка всех компонент на сцене (включая не активные) с реализацией указанного интерфейса
+			/// </summary>
+			/// <typeparam name="IComponent">Тип интерфейса</typeparam>
+			/// <returns>Список всех компонентов на сцене</returns>
+			//---------------------------------------------------------------------------------------------------------
+			public static List<IComponent> GetAllOfInterface<IComponent>()
+			{
+				List<IComponent> list = new List<IComponent>();
+				var root_objs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+				foreach (var root in root_objs)
+				{
+					// Pass in "true" to include inactive and disabled children
+					list.AddRange(root.GetComponentsInChildren<IComponent>(true));
+				}
+				return list;
+			}
+
+			//---------------------------------------------------------------------------------------------------------
+			/// <summary>
 			/// Получение списка всех компонент на сцене удовлетворяющих условию предиката (включая не активные)
 			/// </summary>
 			/// <typeparam name="TComponent">Тип компонента</typeparam>

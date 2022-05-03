@@ -39,9 +39,6 @@ namespace Lotus
 			public ILotusViewItem ViewItem;
 			public Action<ILotusViewItem> OnAction;
 			public Action<ILotusViewItem> OnAfterAction;
-#if USE_WINDOWS
-			public System.Windows.Controls.MenuItem MenuItem;
-#endif
 			#endregion
 
 			#region ======================================= КОНСТРУКТОРЫ ==============================================
@@ -122,22 +119,6 @@ namespace Lotus
 				CreateMenuItem(name, null);
 #endif
 			}
-
-#if USE_WINDOWS
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Конструктор инициализирует объект класса указанными параметрами
-			/// </summary>
-			/// <param name="name">Имя элемента меню</param>
-			/// <param name="on_action">Обработчик событие основного действия</param>
-			/// <param name="icon">Графическая иконка</param>
-			//---------------------------------------------------------------------------------------------------------
-			public CUIContextMenuItem(String name, Action<ILotusViewItem> on_action, System.Drawing.Bitmap icon)
-			{
-				OnAction = on_action;
-				CreateMenuItem(name, icon);
-			}
-#endif
 			#endregion
 
 			#region ======================================= МЕТОДЫ ILotusDuplicate ====================================
@@ -147,92 +128,14 @@ namespace Lotus
 			/// </summary>
 			/// <returns>Дубликат объекта</returns>
 			//---------------------------------------------------------------------------------------------------------
-			public CUIContextMenuItem Duplicate()
+			public virtual CUIContextMenuItem Duplicate()
 			{
 				CUIContextMenuItem item = new CUIContextMenuItem();
 				item.ViewItem = ViewItem;
 				item.OnAction = OnAction;
 				item.OnAfterAction = OnAfterAction;
-#if USE_WINDOWS
-				item.CreateMenuItem(MenuItem);
-#endif
 				return (item);
 			}
-			#endregion
-
-			#region ======================================= ОБЩИЕ МЕТОДЫ ==============================================
-#if USE_WINDOWS
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Создание элемента меню
-			/// </summary>
-			/// <param name="name">Имя элемента меню</param>
-			/// <param name="icon">Графическая иконка</param>
-			//---------------------------------------------------------------------------------------------------------
-			public void CreateMenuItem(String name, System.Drawing.Bitmap icon)
-			{
-				if (MenuItem == null)
-				{
-					MenuItem = new System.Windows.Controls.MenuItem();
-					MenuItem.Header = name;
-					MenuItem.Click += OnItemClick;
-					if (icon != null)
-					{
-						MenuItem.Icon = new System.Windows.Controls.Image
-						{
-							Source = icon.ToBitmapSource(),
-							Width = 16,
-							Height = 16
-						};
-					}
-				}
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Создание элемента меню
-			/// </summary>
-			/// <param name="menu_item">Элемента меню</param>
-			//---------------------------------------------------------------------------------------------------------
-			public void CreateMenuItem(System.Windows.Controls.MenuItem menu_item)
-			{
-				if (MenuItem == null)
-				{
-					MenuItem = new System.Windows.Controls.MenuItem();
-					MenuItem.Header = menu_item.Header;
-					MenuItem.Icon = menu_item.Icon;
-					MenuItem.Click += OnItemClick;
-				}
-				else
-				{
-					MenuItem.Header = menu_item.Header;
-					MenuItem.Icon = menu_item.Icon;
-				}
-			}
-#endif
-			#endregion
-
-			#region ======================================= ОБРАБОТЧИКИ СОБЫТИЙ =======================================
-#if USE_WINDOWS
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Обработка события щелчка на элементе меню
-			/// </summary>
-			/// <param name="sender">Источник события</param>
-			/// <param name="args">Аргументы события</param>
-			//---------------------------------------------------------------------------------------------------------
-			private void OnItemClick(Object sender, System.Windows.RoutedEventArgs args)
-			{
-				if(OnAction != null)
-				{
-					OnAction(ViewItem);
-				}
-				if (OnAfterAction != null)
-				{
-					OnAfterAction(ViewItem);
-				}
-			}
-#endif
 			#endregion
 		}
 
@@ -244,49 +147,6 @@ namespace Lotus
 		public class CUIContextMenu
 		{
 			#region ======================================= СТАТИЧЕСКИЕ ДАННЫЕ ========================================
-#if USE_WINDOWS
-			/// <summary>
-			/// Элемент меню - загрузить объект из файла
-			/// </summary>
-			public readonly static CUIContextMenuItem Load = new CUIContextMenuItem("Загрузить...", 
-				OnLoadItemClick, XResources.Oxygen_document_open_32);
-
-			/// <summary>
-			/// Элемент меню - сохранить объект в файл
-			/// </summary>
-			public readonly static CUIContextMenuItem Save = new CUIContextMenuItem("Сохранить...", 
-				OnSaveItemClick, XResources.Oxygen_document_save_32);
-
-			/// <summary>
-			/// Элемент меню - удалить объект
-			/// </summary>
-			public readonly static CUIContextMenuItem Remove = new CUIContextMenuItem("Удалить", 
-				OnRemoveItemClick, XResources.Oxygen_list_remove_32);
-
-			/// <summary>
-			/// Элемент меню - дублировать объект
-			/// </summary>
-			public readonly static CUIContextMenuItem Duplicate = new CUIContextMenuItem("Дублировать", 
-				OnDuplicateItemClick, XResources.Oxygen_tab_duplicate_32);
-
-			/// <summary>
-			/// Элемент меню - переместить объект вверх
-			/// </summary>
-			public readonly static CUIContextMenuItem MoveUp = new CUIContextMenuItem("Переместить вверх", 
-				OnMoveUpItemClick, XResources.Oxygen_arrow_up_22);
-
-			/// <summary>
-			/// Элемент меню - переместить объект вниз
-			/// </summary>
-			public readonly static CUIContextMenuItem MoveDown = new CUIContextMenuItem("Переместить вниз", 
-				OnMoveDownItemClick, XResources.Oxygen_arrow_down_22);
-
-			/// <summary>
-			/// Элемент меню - не учитывать объект в расчетах
-			/// </summary>
-			public readonly static CUIContextMenuItem NotCalculation = new CUIContextMenuItem("Не учитывать в расчетах",
-				OnNotCalculationItemClick, XResources.Oxygen_user_busy_32);
-#else
 			/// <summary>
 			/// Элемент меню - загрузить объект из файла
 			/// </summary>
@@ -321,7 +181,6 @@ namespace Lotus
 			/// Элемент меню - не учитывать объект в расчетах
 			/// </summary>
 			public readonly static CUIContextMenuItem NotCalculation = new CUIContextMenuItem("Не учитывать в расчетах", OnNotCalculationItemClick);
-#endif
 			#endregion
 
 			#region ======================================= СТАТИЧЕСКИЕ МЕТОДЫ ========================================
@@ -331,7 +190,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnLoadItemClick(ILotusViewItem view_item)
+			protected static void OnLoadItemClick(ILotusViewItem view_item)
 			{
 				if (view_item != null && view_item.DataContext != null)
 				{
@@ -364,7 +223,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnSaveItemClick(ILotusViewItem view_item)
+			protected static void OnSaveItemClick(ILotusViewItem view_item)
 			{
 				if (view_item != null && view_item.DataContext != null)
 				{
@@ -394,7 +253,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnRemoveItemClick(ILotusViewItem view_item)
+			protected static void OnRemoveItemClick(ILotusViewItem view_item)
 			{
 				// Удаляем с отображения
 				if(view_item.IOwner is ILotusOwnerObject owner)
@@ -429,7 +288,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnDuplicateItemClick(ILotusViewItem view_item)
+			protected static void OnDuplicateItemClick(ILotusViewItem view_item)
 			{
 			}
 
@@ -439,7 +298,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnMoveUpItemClick(ILotusViewItem view_item)
+			protected static void OnMoveUpItemClick(ILotusViewItem view_item)
 			{
 				if (view_item != null && view_item.IOwner is IList list)
 				{
@@ -457,7 +316,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnMoveDownItemClick(ILotusViewItem view_item)
+			protected static void OnMoveDownItemClick(ILotusViewItem view_item)
 			{
 				if (view_item != null && view_item.IOwner is IList list)
 				{
@@ -475,7 +334,7 @@ namespace Lotus
 			/// </summary>
 			/// <param name="view_item">Элемент отображения</param>
 			//---------------------------------------------------------------------------------------------------------
-			private static void OnNotCalculationItemClick(ILotusViewItem view_item)
+			protected static void OnNotCalculationItemClick(ILotusViewItem view_item)
 			{
 				if (view_item != null && view_item.DataContext is ILotusNotCalculation calculation)
 				{
@@ -563,7 +422,7 @@ namespace Lotus
 			/// <param name="name">Имя элемента меню</param>
 			/// <param name="on_action">Обработчик событие основного действия</param>
 			//---------------------------------------------------------------------------------------------------------
-			public void AddItem(String name, Action<ILotusViewItem> on_action)
+			public virtual void AddItem(String name, Action<ILotusViewItem> on_action)
 			{
 				Items.Add(new CUIContextMenuItem(name, on_action));
 			}
@@ -576,63 +435,10 @@ namespace Lotus
 			/// <param name="on_action">Обработчик событие основного действия</param>
 			/// <param name="on_after_action">Дополнительный обработчик события после основного действия</param>
 			//---------------------------------------------------------------------------------------------------------
-			public void AddItem(String name, Action<ILotusViewItem> on_action, Action<ILotusViewItem> on_after_action)
+			public virtual void AddItem(String name, Action<ILotusViewItem> on_action, Action<ILotusViewItem> on_after_action)
 			{
 				Items.Add(new CUIContextMenuItem(null, name, on_action, on_after_action));
 			}
-
-#if USE_WINDOWS
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Добавление элемента меню
-			/// </summary>
-			/// <param name="name">Имя элемента меню</param>
-			/// <param name="on_action">Обработчик события элемента меню</param>
-			/// <param name="icon">Иконка элемента меню</param>
-			//---------------------------------------------------------------------------------------------------------
-			public void AddItem(String name, Action<ILotusViewItem> on_action, System.Drawing.Bitmap icon)
-			{
-				Items.Add(new CUIContextMenuItem(name, on_action, icon));
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Установка команд для контекстного меню по умолчанию
-			/// </summary>
-			/// <param name="context_menu">Контекстное меню</param>
-			//---------------------------------------------------------------------------------------------------------
-			public void SetCommandsDefault(System.Windows.Controls.ContextMenu context_menu)
-			{
-				if (ViewItem == null) return;
-
-				// Устанавливаем/обновляем модель
-				if (IsCreatedItems == false)
-				{
-					for (Int32 i = 0; i < Items.Count; i++)
-					{
-						// Если у экземпляра меню есть уже родитель то удалям
-						if (Items[i].MenuItem.Items != null)
-						{
-							System.Windows.Controls.ItemCollection item_collection = Items[i].MenuItem.Items;
-							item_collection.Remove(Items[i].MenuItem);
-						}
-
-						Items[i].ViewItem = ViewItem;
-						context_menu.Items.Add(Items[i].MenuItem);
-					}
-
-					IsCreatedItems = true;
-				}
-				else
-				{
-					// Устанавливаем/обновляем модель
-					for (Int32 i = 0; i < Items.Count; i++)
-					{
-						Items[i].ViewItem = ViewItem;
-					}
-				}
-			}
-#endif
 			#endregion
 		}
 		//-------------------------------------------------------------------------------------------------------------

@@ -88,40 +88,11 @@ namespace Lotus
 			/// Установка контекстного меню
 			/// </summary>
 			//---------------------------------------------------------------------------------------------------------
-			public void SetContextMenu()
+			public virtual void SetContextMenu()
 			{
 				mUIContextMenu = new CUIContextMenu();
 				mUIContextMenu.ViewItem = this;
-				mUIContextMenu.AddItem("Показать в проводнике", (ILotusViewItem view_item) =>
-				{
-#if USE_WINDOWS
-					Windows.XNative.ShellExecute(IntPtr.Zero,
-						"explore",
-						DataContext.FullName,
-						"",
-						"",
-						Windows.TShowCommands.SW_NORMAL);
-#else
-					
-#endif
-				});
 				mUIContextMenu.AddItem(CUIContextMenu.Remove.Duplicate());
-			}
-
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Открытие контекстного меню
-			/// </summary>
-			/// <param name="context_menu">Контекстное меню</param>
-			//---------------------------------------------------------------------------------------------------------
-			public override void OpenContextMenu(System.Object context_menu)
-			{
-#if USE_WINDOWS
-				if(context_menu is System.Windows.Controls.ContextMenu window_context_menu)
-				{
-					mUIContextMenu.SetCommandsDefault(window_context_menu);
-				}
-#endif
 			}
 
 			//---------------------------------------------------------------------------------------------------------

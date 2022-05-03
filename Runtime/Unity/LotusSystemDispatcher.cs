@@ -57,174 +57,6 @@ namespace Lotus
 			public const String MESSAGE_INFO = "Info";
 			#endregion
 
-			#region ======================================= СТАТИЧЕСКИЕ ДАННЫЕ ========================================
-			// Параметры разработки 2D графики
-			internal static Single mScaledScreenX = 1;
-			internal static Single mScaledScreenY = 1;
-#if UNITY_EDITOR
-			internal static System.Type mTypeGameView;
-			internal static System.Reflection.MethodInfo mGetSizeOfMainGameView;
-			internal static Int32 mLastScreenWidth;
-			internal static Int32 mLastScreenHeight;
-			internal static Int32 mCurrentScreenWidth;
-			internal static Int32 mCurrentScreenHeight;
-#endif
-			#endregion
-
-			#region ======================================= СТАТИЧЕСКИЕ СВОЙСТВА ======================================
-			//
-			// ПАРАМЕТРЫ РАЗРАБОТКИ
-			//
-			/// <summary>
-			/// Текущая ширина экрана
-			/// </summary>
-			public static Single ScreenWidth
-			{
-				get
-				{
-#if UNITY_EDITOR
-					if (UnityEditor.EditorApplication.isPlaying)
-					{
-						return mCurrentScreenWidth;
-					}
-					else
-					{
-						return ((Int32)GetSizeOfMainGameView().x);
-					}
-#else
-					return (Screen.width);
-#endif
-				}
-			}
-
-			/// <summary>
-			/// Текущая высота экрана
-			/// </summary>
-			public static Single ScreenHeight
-			{
-				get
-				{
-#if UNITY_EDITOR
-					if (UnityEditor.EditorApplication.isPlaying)
-					{
-						return mCurrentScreenHeight;
-					}
-					else
-					{
-						return ((Int32)GetSizeOfMainGameView().y);
-					}
-#else
-					return (Screen.height);
-#endif
-				}
-			}
-
-			/// <summary>
-			/// Ширина экрана при разработке
-			/// </summary>
-			public static Int32 DesignScreenWidth
-			{
-				get
-				{
-					return (Instance.DesignWidth);
-				}
-			}
-
-			/// <summary>
-			/// Высота экрана при разработке
-			/// </summary>
-			public static Int32 DesignScreenHeight
-			{
-				get
-				{
-					return (Instance.DesignHeight);
-				}
-			}
-
-			/// <summary>
-			/// Масштаб ширины экрана по отношению к ширине экрана при разработке
-			/// </summary>
-			public static Single ScaledScreenX
-			{
-				get
-				{
-#if UNITY_EDITOR
-					if (UnityEditor.EditorApplication.isPlaying)
-					{
-						return mScaledScreenX;
-					}
-					else
-					{
-						return 1.0f;
-					}
-#else
-					return (mScaledScreenX);
-#endif
-				}
-			}
-
-			/// <summary>
-			/// Масштаб высоты экрана по отношению к высоте экрана при разработке
-			/// </summary>
-			public static Single ScaledScreenY
-			{
-				get
-				{
-#if UNITY_EDITOR
-					if (UnityEditor.EditorApplication.isPlaying)
-					{
-						return mScaledScreenY;
-					}
-					else
-					{
-						return 1.0f;
-					}
-#else
-					return (mScaledScreenY);
-#endif
-				}
-			}
-
-			/// <summary>
-			/// Средний коэффициент масштаба
-			/// </summary>
-			public static Single ScaledScreenAverage
-			{
-				get
-				{
-					return (ScaledScreenX + ScaledScreenY) / 2;
-				}
-			}
-			#endregion
-
-			#region ======================================= СТАТИЧЕСКИЕ МЕТОДЫ ========================================
-			//---------------------------------------------------------------------------------------------------------
-			/// <summary>
-			/// Получение размера окна игры редактора
-			/// </summary>
-			/// <returns>Размера окна</returns>
-			//---------------------------------------------------------------------------------------------------------
-			internal static Vector2 GetSizeOfMainGameView()
-			{
-#if UNITY_EDITOR
-				if (mTypeGameView == null)
-				{
-					mTypeGameView = Type.GetType("UnityEditor.GameView,UnityEditor");
-				}
-
-				if (mGetSizeOfMainGameView == null)
-				{
-					mGetSizeOfMainGameView = mTypeGameView.GetMethod("GetSizeOfMainGameView", BindingFlags.NonPublic | BindingFlags.Static);
-				}
-
-				return (Vector2)mGetSizeOfMainGameView.Invoke(null, null);
-
-#else
-				return (new Vector2(Screen.width, Screen.height));
-#endif
-			}
-			#endregion
-
 			#region ======================================= ДАННЫЕ ====================================================
 			// Основные параметры
 			[SerializeField]
@@ -241,10 +73,6 @@ namespace Lotus
 			internal Boolean mUseIMGUI;
 			[SerializeField]
 			internal GUISkin mCurrentSkin;
-			[SerializeField]
-			internal Int32 mDesignScreenWidth;
-			[SerializeField]
-			internal Int32 mDesignScreenHeight;
 
 			// Управление консолью
 			[SerializeField]
@@ -375,44 +203,6 @@ namespace Lotus
 					{
 						XGUISkin.DefaultSkin = mCurrentSkin;
 					}
-				}
-			}
-
-			/// <summary>
-			/// Ширина экрана при разработке
-			/// </summary>
-			/// <remarks>
-			/// Применяется для последующего вычисления актуального масштаба экран и корректировки 
-			/// местоположения двухмерных элементов графического интерфейса
-			/// </remarks>
-			public Int32 DesignWidth
-			{
-				get
-				{
-					return mDesignScreenWidth;
-				}
-				set
-				{
-					mDesignScreenWidth = value;
-				}
-			}
-
-			/// <summary>
-			/// Высота экрана при разработке
-			/// </summary>
-			/// <remarks>
-			/// Применяется для последующего вычисления актуального масштаба экран и корректировки 
-			/// местоположения двухмерных элементов графического интерфейса
-			/// </remarks>
-			public Int32 DesignHeight
-			{
-				get
-				{
-					return mDesignScreenHeight;
-				}
-				set
-				{
-					mDesignScreenHeight = value;
 				}
 			}
 
@@ -634,9 +424,11 @@ namespace Lotus
 				}
 
 				mInfoPosition = new Rect(5, 5, 340, 40);
-				mInfoPosition.x = ScreenWidth - mInfoPosition.width - mInfoPosition.x;
+				mInfoPosition.x = LotusSystemSettingsService.Instance.ScreenWidth - mInfoPosition.width - mInfoPosition.x;
 				mInfoText = "Screen Width = " + Screen.width.ToString() + "; Screen Height = " + Screen.height.ToString();
-				mInfoText += "\n" + "ScaledScreenX = " + ScaledScreenX.ToString("F2") + "; ScaledScreenY = " + ScaledScreenY.ToString("F2");
+				Single sx = LotusSystemSettingsService.Instance.ScaledScreenX;
+				Single sy = LotusSystemSettingsService.Instance.ScaledScreenY;
+				mInfoText += "\n" + "ScaledScreenX = " + sx.ToString("F2") + "; ScaledScreenY = " + sy.ToString("F2");
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -853,38 +645,7 @@ namespace Lotus
 			//---------------------------------------------------------------------------------------------------------
 			private void InitIMGUI()
 			{
-				if (mDesignScreenWidth == 0) mDesignScreenWidth = 1280;
-				if (mDesignScreenHeight == 0) mDesignScreenHeight = 800;
 
-				// Если используется IMGUI и скин равен null
-				if (mCurrentSkin == null)
-				{
-					mCurrentSkin = XGUISkin.DefaultSkin;
-				}
-#if UNITY_EDITOR
-				if (mCurrentScreenWidth == 0 || mCurrentScreenHeight == 0)
-				{
-					Vector2 res = GetSizeOfMainGameView();
-
-					// Текущий размер экрана
-					mCurrentScreenWidth = mLastScreenWidth = (Int32)res.x;
-					mCurrentScreenHeight = mLastScreenHeight = (Int32)res.y;
-
-					// Cчитаем масштаб
-					mScaledScreenX = (Single)mLastScreenWidth / (Single)mDesignScreenWidth;
-					mScaledScreenY = (Single)mLastScreenHeight / (Single)mDesignScreenHeight;
-				}
-				else
-				{
-					// Повторно считаем масштаб
-					mScaledScreenX = (Single)mLastScreenWidth / (Single)mDesignScreenWidth;
-					mScaledScreenY = (Single)mLastScreenHeight / (Single)mDesignScreenHeight;
-				}
-#else
-					// Масштаб
-					mScaledScreenX = (Single)Screen.width / (Single)mDesignScreenWidth;
-					mScaledScreenY = (Single)Screen.height / (Single)mDesignScreenHeight;
-#endif
 			}
 
 			//---------------------------------------------------------------------------------------------------------
@@ -895,24 +656,6 @@ namespace Lotus
 			private void UpdateIMGUI()
 			{
 				GUI.skin = mCurrentSkin;
-#if UNITY_EDITOR
-				// Получаем текущий размер экрана
-				Vector2 res = GetSizeOfMainGameView();
-				mCurrentScreenWidth = (Int32)res.x;
-				mCurrentScreenHeight = (Int32)res.y;
-
-				// Если он не равен предыдущему
-				if (mCurrentScreenWidth != mLastScreenWidth || mCurrentScreenHeight != mLastScreenHeight)
-				{
-					// Обновляем
-					mLastScreenWidth = mCurrentScreenWidth;
-					mLastScreenHeight = mCurrentScreenHeight;
-
-					// Повторно считаем масштаб
-					mScaledScreenX = (Single)mLastScreenWidth / (Single)mDesignScreenWidth;
-					mScaledScreenY = (Single)mLastScreenHeight / (Single)mDesignScreenHeight;
-				}
-#endif
 			}
 			#endregion
 		}

@@ -196,6 +196,7 @@ namespace Lotus
 			/// Восстановление данных документа к состоянию последнего сохранения
 			/// </summary>
 			/// <param name="document">Документ</param>
+			/// <param name="serializer">Сериализатор</param>
 			/// <returns>Статус восстановления</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public static Boolean RestoreDocument<TDocument>(this TDocument document, ILotusSerializer serializer = null) where TDocument : ILotusDocument
@@ -255,6 +256,8 @@ namespace Lotus
 			/// Сохранение изменения документа в связанный физический файл
 			/// </summary>
 			/// <param name="document">Документ</param>
+			/// <param name="title">Заголовок диалога</param>
+			/// <param name="serializer">Сериализатор</param>
 			/// <returns>Статус сохранения</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public static Boolean SaveDocument<TDocument>(this TDocument document, String title = null, ILotusSerializer serializer = null) where TDocument : ILotusDocument
@@ -334,6 +337,8 @@ namespace Lotus
 			/// Сохранение изменения документа в физический файл
 			/// </summary>
 			/// <param name="document">Документ</param>
+			/// <param name="title">Заголовок диалога</param>
+			/// <param name="serializer">Сериализатор</param>
 			/// <returns>Статус сохранения</returns>
 			//---------------------------------------------------------------------------------------------------------
 			public static Boolean SaveAsDocument<TDocument>(this TDocument document, String title = null, ILotusSerializer serializer = null) where TDocument : ILotusDocument
